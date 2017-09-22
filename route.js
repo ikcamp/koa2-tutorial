@@ -1,15 +1,6 @@
-module.exports = [
-  {
-    match: "/",
-    controller: "home.index"
-  },
-  {
-    match: "/user",
-    controller: "home.login"
-  },
-  {
-    match: "/user/register",
-    controller: "home.register",
-    method: "post"
-  }
-]
+const HomeController = require("./controller/home")
+module.exports = (app) => {
+  app.get("/", HomeController.index)
+  app.get("/user", HomeController.login)
+  app.post("/user/register", HomeController.register)
+}

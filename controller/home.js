@@ -1,22 +1,23 @@
+const HomeService = require("../service/home")
 module.exports = {
-  index: async function (scope) {
-    Object.assign(scope, {title: "iKcamp"})
-    await this.render("index")
+  index: async function (ctx, next) {
+    ctx.state.title = "欢迎进入iKcamp"
+    await ctx.render("./home/index.html")
   },
-  login: async function (scope) {
-    Object.assign(scope, {title: "请登录"})
-    await this.render("login")
+  login: async function (ctx, next) {
+    ctx.state.title = "请登录"
+    await ctx.render("./home/login.html")
   },
-  register: async function (scope){
-    let params = this.request.body
+  register: async function (ctx, next){
+    let params = ctx.request.body
     let name = params.name
     let password = params.password
-    let res = await this.service.home.register(name,password)
-    Object.assign(scope, res.data)
+    let res = await HomeService.register(name,password)
     if(res.status == "-1"){
-      await this.render("login")
+      await ctx.render("./home/login.html", res.data)
     }else{
-      await this.render("success")
+      ctx.state.title = "个人中心"
+      await ctx.render("./home/success.html",res.data)
     }
   }
 }
