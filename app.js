@@ -11,15 +11,15 @@ const router = require("./route")
 const nunjucksEnvironment = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(path.join(__dirname, './views'))
 )
-app.use(async (ctx,next)=>{
-  ctx.state = {
-    title: "ikcamp",
-    __sourceMap(path){
-      return path
-    }
-  }
-  await next()
-})
+// app.use(async (ctx,next)=>{
+//   ctx.state = {
+//     title: "ikcamp",
+//     __sourceMap(path){
+//       return path
+//     }
+//   }
+//   await next()
+// })
 app.use(views(path.join(__dirname, '/views'), {
   options: {
     nunjucksEnv: nunjucksEnvironment
