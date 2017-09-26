@@ -6,20 +6,13 @@ const path = require("path")
 const staticFiles = require('koa-static')
 const Router = require('koa-router')()
 const BodyParser = require('koa-bodyparser')
+
 const router = require("./route")
 
 const nunjucksEnvironment = new nunjucks.Environment(
   new nunjucks.FileSystemLoader(path.join(__dirname, './views'))
 )
-// app.use(async (ctx,next)=>{
-//   ctx.state = {
-//     title: "ikcamp",
-//     __sourceMap(path){
-//       return path
-//     }
-//   }
-//   await next()
-// })
+
 app.use(views(path.join(__dirname, '/views'), {
   options: {
     nunjucksEnv: nunjucksEnvironment
