@@ -1,31 +1,34 @@
 const Koa = require('koa')
 const app = new Koa()
-const views = require("koa-views")
-const nunjucks = require('nunjucks')
-const path = require("path")
-const staticFiles = require('koa-static')
-const Router = require('koa-router')()
-const BodyParser = require('koa-bodyparser')
 
-const router = require("./route")
+// 记录执行的时间
+app.use(async (ctx, next)=>{
+  let stime = new Date().getTime()
+  await next()
+  let etime = new Date().getTime()
+  ctx.response.type = 'text/html'
+  ctx.response.body = '<h1>Hello World</h1>'
+  console.log(`请求地址: ${ctx.path}，响应时间：${etime - stime}ms`)
+});
 
-const nunjucksEnvironment = new nunjucks.Environment(
-  new nunjucks.FileSystemLoader(path.join(__dirname, './views'))
-)
+app.use(async (ctx, next) => {
+  console.log('中间件1 doSoming')
+  await next();
+  console.log('中间件1 end')
+})
 
-app.use(views(path.join(__dirname, '/views'), {
-  options: {
-    nunjucksEnv: nunjucksEnvironment
-  },
-  map: {
-    html: "nunjucks"
-  }
-}))
-app.use(staticFiles(path.resolve(__dirname, "./public")))
+app.use(async (ctx, next) => {
+  console.log('中间件2 doSoming')
+  await next();
+  console.log('中间件2 end')
+})
 
-app.use(BodyParser())
-app.use(Router.routes()).use(Router.allowedMethods())
-router(Router)
+app.use(async (ctx, next) => {
+  console.log('中间件3 doSoming')
+  await next();
+  console.log('中间件3 end')
+})
 
-app.listen(3000)
-console.log(`app started at port 3000...`);
+app.listen(3000, () => {
+  console.log('server is running at http://0.0.0.0:3000')
+})
