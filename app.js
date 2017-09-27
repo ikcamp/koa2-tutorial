@@ -8,5 +8,5 @@ app.use(async (ctx, next)=>{
 })
 
 app.listen(3000, () => {
-  console.log('server is running at http://0.0.0.0:3000')
+  console.log('server is running at http://localhost:3000')
 })
