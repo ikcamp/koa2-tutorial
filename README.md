@@ -75,7 +75,7 @@ app.use(async (ctx, next) => {
 })
 
 app.listen(3000, () => {
-  console.log('server is running at http://0.0.0.0:3000')
+  console.log('server is running at http://localhost:3000')
 })
 ``` 
 
@@ -84,15 +84,15 @@ app.listen(3000, () => {
 运行起来后，控制台显示： 
 
 ```txt
-server is running at http://0.0.0.0:3000
+server is running at http://localhost:3000
 ``` 
 
 <br> 
 
-然后打开浏览器，访问 `http://0.0.0.0:3000`，控制台显示内容更新为： 
+然后打开浏览器，访问 `http://localhost:3000`，控制台显示内容更新为： 
 
 ```txt
-server is running at http://0.0.0.0:3000
+server is running at http://localhost:3000
 中间件1 doSoming
 中间件2 doSoming
 中间件3 doSoming
