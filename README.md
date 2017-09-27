@@ -1,8 +1,8 @@
-## Koa 起手 
+# Koa 起手 
 
 <br> 
 
-### <a>&sect; 准备工作</a>
+## <a>&sect; 准备工作</a>
 > 身为程序员，第一招必是『Hello World』。 
 
 <br> 
@@ -46,7 +46,7 @@ npm init
 
 <br>
 
-### <a>&sect; 启动服务器</a> 
+## <a>&sect; 启动服务器</a> 
 
 运行如下命令，安装 `Koa`(版本信息会自动保存在 `package.json` 中) 
 
