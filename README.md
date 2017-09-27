@@ -50,7 +50,7 @@ const app = new Koa()
 app.use(async (ctx, next)=>{
   let stime = new Date().getTime()
   await next()
-  let etime = new Date().getTIme()
+  let etime = new Date().getTime()
   ctx.response.type = 'text/html'
   ctx.response.body = '<h1>Hello World</h1>'
   console.log(`请求地址: ${ctx.path}，响应时间：${etime - stime}ms`)
@@ -109,6 +109,65 @@ server is running at http://localhost:3000
 此外，如果一个中间件没有调用 `await next()`，会怎样呢？答案是『后面的中间件将不会执行』。 
 
 <br> 
+
+修改 `app.js` 如下，我们去掉了第三个中间件里面的 `await`： 
+
+```js
+const Koa = require('koa')
+const app = new Koa()
+
+// 记录执行的时间
+app.use(async (ctx, next)=>{
+  let stime = new Date().getTime()
+  await next()
+  let etime = new Date().getTime()
+  ctx.response.type = 'text/html'
+  ctx.response.body = '<h1>Hello World</h1>'
+  console.log(`请求地址: ${ctx.path}，响应时间：${etime - stime}ms`)
+});
+
+app.use(async (ctx, next) => {
+  console.log('中间件1 doSoming')
+  await next();
+  console.log('中间件1 end')
+})
+
+app.use(async (ctx, next) => {
+  console.log('中间件2 doSoming')
+  // 注意，这里我们删掉了 next
+  // await next()
+  console.log('中间件2 end')
+})
+
+app.use(async (ctx, next) => {
+  console.log('中间件3 doSoming')
+  await next();
+  console.log('中间件3 end')
+})
+
+app.listen(3000, () => {
+  console.log('server is running at http://localhost:3000')
+})
+```
+
+<br>
+
+重新运行代码后，控制台显示如下： 
+
+```txt
+server is running at http://localhost:3000
+中间件1 doSoming
+中间件2 doSoming
+中间件2 end
+中间件1 end
+请求地址: /，响应时间：1ms
+``` 
+
+<br> 
+
+与我们的预期结果『后面的中间件将不会执行』是一致的。 
+
+<br>
 
 下一节中，我们将学习下如何响应浏览器的各种请求。 
 
