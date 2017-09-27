@@ -1,0 +1,22 @@
+{
+  "name": "koa2-tutorial",
+  "version": "1.0.0",
+  "description": "> 正是因为中间件的扩展性才使得 `Koa` 的代码简单灵活。",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BruceCham/koa2-tutorial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BruceCham/koa2-tutorial/issues"
+  },
+  "homepage": "https://github.com/BruceCham/koa2-tutorial#readme",
+  "dependencies": {
+    "koa": "^2.3.0"
+  }
+}
