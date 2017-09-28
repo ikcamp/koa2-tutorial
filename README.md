@@ -3,7 +3,7 @@
 
 <br/> 
 
-路由是用于描述URL与处理函数之间的对应关系的。比如用户访问 `http://localhost:3000/`，那么浏览器就会显示 `index` 页面的内容，如果用户访问的是 `http://localhost:3000/home`，那么浏览器应该显示 `home` 页面的内容。 
+路由是用于描述 URL 与处理函数之间的对应关系的。比如用户访问 `http://localhost:3000/`，那么浏览器就会显示 `index` 页面的内容，如果用户访问的是 `http://localhost:3000/home`，那么浏览器应该显示 `home` 页面的内容。 
 
 <br/> 
 
@@ -125,7 +125,7 @@ node app.js
 
 <br/> 
 
-当然，除了GET方法，koa-router也支持处理其他请求方法，比如： 
+当然，除了 `GET` 方法，`koa-router` 也支持处理其他请求方法，比如： 
 
 ```js
 router
