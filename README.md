@@ -104,7 +104,7 @@ node app.js
 在浏览器中访问 `http://localhost:3000` 
 
 <div align="center">
-  <img src="./images/index.png" width="720"/>
+  <img src="./images/index.png" width="640"/>
 </div> 
 
 <br/>
@@ -112,7 +112,7 @@ node app.js
 在浏览器中访问 `http://localhost:3000/home` 
 
 <div align="center">
-  <img src="./images/home.png" width="720"/>
+  <img src="./images/home.png" width="640"/>
 </div> 
 
 <br/>
@@ -120,7 +120,7 @@ node app.js
 在浏览器中访问 `http://localhost:3000/404` 
 
 <div align="center">
-  <img src="./images/404.png" width="720"/>
+  <img src="./images/404.png" width="640"/>
 </div> 
 
 <br/> 
@@ -218,6 +218,6 @@ router.url('user', 3);
 
 <br/> 
 
-下一节，我们将讲述下项目中常见的几种请求写法。
+下一节，我们将讲述下项目中常见的几种请求写法及参数解析。
 
 
