@@ -2,8 +2,8 @@
 
 <br> 
 
-## 准备工作
-> 身为程序员，第一招必是『Hello World』。 
+## 准备工作 
+> 身为程序员，初入江湖第一招：『Hello World』 
 
 <br> 
 
@@ -62,8 +62,9 @@ npm install koa
 const Koa = require('koa')
 const app = new Koa()
 
-app.listen(3000)
-console.log(`app started at port 3000...`);
+app.listen(3000, () => {
+  console.log('server is running at http://localhost:3000')
+})
 ``` 
 
 运行 `node app.js` 并打开浏览器访问 `localhost:3000`，页面显示 `Not Found`。 
@@ -84,7 +85,7 @@ app.use(async (ctx, next) => {
 })
 
 app.listen(3000, () => {
-  console.log('server is running at http://0.0.0.0:3000')
+  console.log('server is running at http://localhost:3000')
 })
 ``` 
 
