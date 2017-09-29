@@ -1,223 +1,195 @@
-# 路由 koa-router 
- > 上一节我们学习了中间件的基本概念，本节主要带大家学习下 `koa-router` 路由中间件的使用方法。 
+# 处理 POST/GET 请求 
+ > 在学习了 `Router` 之后，我们就可以用它来处理 `POST/GET` 请求。 
 
 <br/> 
 
-路由是用于描述 `URL` 与处理函数之间的对应关系的。比如用户访问 `http://localhost:3000/`，那么浏览器就会显示 `index` 页面的内容，如果用户访问的是 `http://localhost:3000/home`，那么浏览器应该显示 `home` 页面的内容。 
+`koa-router` 提供了 `.get`、`.post`、`.put` 和 `.del` 接口来处理各种请求，但实际业务上，我们大部分只会接触到 `POST` 和 `GET`，所以接下来只针对这两种请求类型来说明。 
 
 <br/> 
 
-要实现上述功能，如果不借助 `koa-router` 或者其他路由中间件，我们自己去处理路由，那么写法可能如下所示，我们修改 `app.js`： 
+## Get 请求 
+
+<br/>
+
+当我们捕获到 `Get` 请求后，一般都需要解析出来请求带过来的数据。数据传递过来的方式一般有两种： 
+
+<br/> 
+
+### 1. 请求参数放在 `URL` 后面  
+
+```txt
+http://localhost:3000/home?id=12&name=ikcamp
+``` 
+
+<br/>
+
+`koa-router` 封装的 `request` 对象，里面的 `query` 方法或 `querystring` 方法可以直接获取到 `Get` 请求的数据，唯一不同的是 `query` 返回的是对象，而 `querystring` 返回的是字符串。 
+
+修改 `app.js`，我们加入解析方式： 
 
 ```js
   const Koa = require('koa')
+  const router = require('koa-router')()
   const app = new Koa()
 
-  app.use(async (ctx, next) => {
-    if (ctx.request.path === '/') {
-        ctx.response.body = 'index page'
-    } else {
-        await next()
-    }
+  router.get('/', async(ctx, next) => {
+    ctx.response.body = `<h1>index page</h1>`
   })
-  app.use(async (ctx, next) => {
-    if (ctx.request.path === '/home') {
-        ctx.response.body = 'HOME page'
-    } else {
-        await next()
-    }
+
+  router.get('/home', async(ctx, next) => {
+    console.log(ctx.request.query)
+    console.log(ctx.request.querystring)
+    ctx.response.body = '<h1>HOME page</h1>'
   })
-  app.use(async (ctx, next) => {
-    if (ctx.request.path === '/404') {
-        ctx.response.body = '404 Not Found'
-    } else {
-        await next()
-    }
+
+  router.get('/404', async(ctx, next) => {
+    ctx.response.body = '<h1>404 Not Found</h1>'
   })
+
+  // add router middleware:
+  app.use(router.routes())
 
   app.listen(3000, () => {
     console.log('server is running at http://localhost:3000')
   })
 ``` 
 
-上述代码中，由 `async` 标记的函数称为异步函数，在异步函数中，可以用 `await` 调用另一个异步函数，这两个关键字将在 `ES7` 中引入。参数 `ctx` 是由 `koa` 传入的，封装了 `request` 和 `response` 的变量，我们可以通过它访问 `request` 和 `response`，`next` 是 `koa` 传入的将要处理的下一个异步函数。 
-
-<br/> 
-
-这样的写法虽然能够处理简单的应用，但是，一旦要处理的 `URL` 多起来就会显得特别笨重。所以我们可以借助 `koa-router` 来更简单的实现这一功能。 
-
 <br/>
 
-## 安装 koa-router 
+运行代码，并通过浏览器访问，这时候我们查看控制台显示： 
 
-<br/> 
+```txt
+// 浏览器打开访问 http://localhost:3000/home?id=12&name=ikcamp
 
-通过 `npm` 命令直接安装： 
-
-```js
-npm install koa-router
+{ id: '12', name: 'ikcamp' }
+id=12&name=ikcamp
 ``` 
 
 <br/> 
 
-## 使用方法 
+### 2. 请求参数放在 `URL` 中间 
+
+```txt
+http://localhost:3000/home/12/ikcamp
+``` 
+
+<br/>
+
+这种情况下，解析方式肯定与上面的不一样了，`koa-router` 会把请求参数解析在 `params` 对象上，我们修改 `app.js` 文件，增加新的路由来测试下： 
+
+```js
+  // 增加如下代码
+  router.get('/home/:id/:name', async(ctx, next)=>{
+    console.log(ctx.params)
+    ctx.response.body = '<h1>HOME page /:id/:name</h1>'
+  })
+``` 
 
 <br/> 
 
-在 `app.js` 中使用 `koa-router` 来处理 `URL`，代码如下： 
+运行代码，并通过浏览器访问，然后查看下控制台显示的日志信息： 
+
+```txt
+// 请求地址 http://localhost:3000/home/12/ikcamp 
+{ id: '12', name: 'ikcamp' } 
+``` 
+
+<br/>
+
+##  Post 请求 
+
+<br/>
+
+当用 `post` 方式请求时，我们会遇到一个问题：`post` 请求通常都会通过表单或 `JSON` 形式发送，而无论是 `Node` 还是 `Koa`，都 **没有提供** 解析 `post` 请求参数的功能。 
+
+<br/> 
+
+### koa-bodyparser 说：『是时候登场了！』。 
+
+<br/> 
+
+首先，安装 `koa-bodyparser` 包： 
+
+```js
+npm install koa-bodyparser
+``` 
+
+<br/> 
+
+安装完成之后，我们需要在 `app.js` 中引入中间件并应用： 
 
 ```js
   const Koa = require('koa')
-  // 注意require('koa-router')返回的是函数:
   const router = require('koa-router')()
+  const bodyParser = require('koa-bodyparser')
   const app = new Koa()
 
-  // add url-route:
-  router.get('/', async (ctx, next) => {
-      ctx.response.body = `<h1>index page</h1>`
+  app.use(bodyParser())
+
+  router.get('/', async(ctx, next) => {
+    ctx.response.body = `<h1>index page</h1>`
   })
 
-  router.get('/home', async (ctx, next) => {
-      ctx.response.body = '<h1>HOME page</h1>'
+  router.get('/home', async(ctx, next) => {
+    console.log(ctx.request.query)
+    console.log(ctx.request.querystring)
+    ctx.response.body = '<h1>HOME page</h1>'
   })
 
-  router.get('/404', async (ctx, next) => {
-      ctx.response.body = '<h1>404 Not Found</h1>'
+  router.get('/home/:id/:name', async(ctx, next)=>{
+    console.log(ctx.params)
+    ctx.response.body = '<h1>HOME page /:id/:name</h1>'
   })
 
-  // add router middleware:
+  router.get('/404', async(ctx, next) => {
+    ctx.response.body = '<h1>404 Not Found</h1>'
+  })
+
   app.use(router.routes())
 
-  app.listen(3000, ()=>{
+  app.listen(3000, () => {
     console.log('server is running at http://localhost:3000')
   })
-``` 
+```
 
-运行 `app.js`： 
-
-```js
-node app.js
-``` 
-
-<br/> 
-
-在浏览器中访问 `http://localhost:3000` 
-
-<div align="center">
-  <img src="./images/index.png" width="640"/>
-</div> 
+然后我们来试着写一个简单的表单提交实例
 
 <br/>
 
-在浏览器中访问 `http://localhost:3000/home` 
-
-<div align="center">
-  <img src="./images/home.png" width="640"/>
-</div> 
-
-<br/>
-
-在浏览器中访问 `http://localhost:3000/404` 
-
-<div align="center">
-  <img src="./images/404.png" width="640"/>
-</div> 
-
-<br/> 
-
-当然，除了 `GET` 方法，`koa-router` 也支持处理其他请求方法，比如： 
+修改 `app.js` 增加如下代码，实现增加表单页面的路由：
 
 ```js
-router
-  .get('/', function (ctx, next) {
-    ctx.body = 'Hello World!';
+  // 增加返回表单页面的路由
+  router.get('/user', async(ctx, next)=>{
+    ctx.response.body = 
+    `
+      <form action="/user/register" method="post">
+        <input name="name" type="text" placeholder="请输入用户名：ikcamp"/> 
+        <br/>
+        <input name="password" type="text" placeholder="请输入密码：123456"/>
+        <br/> 
+        <button>GoGoGo</button>
+      </form>
+    `
   })
-  .post('/users', function (ctx, next) {
-    // ... 
-  })
-  .put('/users/:id', function (ctx, next) {
-    // ... 
-  })
-  .del('/users/:id', function (ctx, next) {
-    // ... 
-  })
-  .all('/users/:id', function (ctx, next) {
-    // ... 
-  });
-``` 
-
-<br/> 
-
-## 其他特性 
-
-<br/> 
-
-### 命名路由 
-
-<br/>
-
-我们可以为路由命名，这样，在开发过程中我们能够很方便的生成和重命名路由： 
-
-```js
-router.get('user', '/users/:id', function (ctx, next) {
- // ... 
-});
- 
-router.url('user', 3);
-// => "/users/3" 
 ``` 
 
 <br/>
 
-### 多中间件 
+修改 `app.js` 增加如下代码，实现 `post` 表单提交对应的路由： 
 
 ```js
-  router.get(
-    '/users/:id',
-    function (ctx, next) {
-      return User.findOne(ctx.params.id).then(function(user) {
-        ctx.user = user;
-        next();
-      });
-    },
-    function (ctx) {
-      console.log(ctx.user);
-      // => { id: 17, name: "Alex" } 
+  // 增加响应表单请求的路由
+  router.post('/user/register',async(ctx, next)=>{
+    let {name, password} = ctx.request.body
+    if( name == 'ikcamp' && password == '123456' ){
+      ctx.response.body = `Hello， ${name}！`
+    }else{
+      ctx.response.body = '账号信息错误'
     }
-  );
-``` 
-
-<br/>
-
-### 嵌套路由 
-
-```js
-  let forums = new Router();
-  let posts = new Router();
-  
-  posts.get('/', function (ctx, next) {...});
-  posts.get('/:pid', function (ctx, next) {...});
-  forums.use('/forums/:fid/posts', posts.routes(), posts.allowedMethods());
-  
-  // responds to "/forums/123/posts" and "/forums/123/posts/123" 
-  app.use(forums.routes());
-``` 
-
-<br/> 
-
-### 路由前缀 
-
-```js
-  let router = new Router({
-    prefix: '/users'
-  });
-  
-  router.get('/', ...); // responds to "/users" 
-  router.get('/:id', ...); // responds to "/users/:id" 
+  })
 ```
 
 <br/> 
 
-下一节，我们将讲述下项目中常见的几种请求写法及参数解析。
-
-
+常见的 `get` 和 `post` 请求，以及相应的参数传递解析，我们已经学习过了。下一节中，我们会把项目整理重构下，做个分层，并引入视图层。
