@@ -1,116 +1,223 @@
-# koa-router 
-> 正是因为中间件的扩展性才使得 `Koa` 的代码简单灵活。 
+# 路由 koa-router 
+ > 上一节我们学习了中间件的基本概念，本节主要带大家学习下 `koa-router` 路由中间件的使用方法。 
 
-<br> 
+<br/> 
 
-在 `app.js` 中，有这样一段代码： 
+路由是用于描述 `URL` 与处理函数之间的对应关系的。比如用户访问 `http://localhost:3000/`，那么浏览器就会显示 `index` 页面的内容，如果用户访问的是 `http://localhost:3000/home`，那么浏览器应该显示 `home` 页面的内容。 
+
+<br/> 
+
+要实现上述功能，如果不借助 `koa-router` 或者其他路由中间件，我们自己去处理路由，那么写法可能如下所示，我们修改 `app.js`： 
 
 ```js
-app.use(async (ctx, next)=>{
-  await next()
-  ctx.response.type = 'text/html'
-  ctx.response.body = '<h1>Hello World</h1>'  
-})
+  const Koa = require('koa')
+  const app = new Koa()
+
+  app.use(async (ctx, next) => {
+    if (ctx.request.path === '/') {
+        ctx.response.body = 'index page'
+    } else {
+        await next()
+    }
+  })
+  app.use(async (ctx, next) => {
+    if (ctx.request.path === '/home') {
+        ctx.response.body = 'HOME page'
+    } else {
+        await next()
+    }
+  })
+  app.use(async (ctx, next) => {
+    if (ctx.request.path === '/404') {
+        ctx.response.body = '404 Not Found'
+    } else {
+        await next()
+    }
+  })
+
+  app.listen(3000, () => {
+    console.log('server is running at http://localhost:3000')
+  })
 ``` 
 
-它的作用是：每收到一个 `http` 请求，`Koa` 都会调用通过 `app.use()` 注册的 `async` 函数，并传入了两个参数 `ctx` 和 `next`。 
+上述代码中，由 `async` 标记的函数称为异步函数，在异步函数中，可以用 `await` 调用另一个异步函数，这两个关键字将在 `ES7` 中引入。参数 `ctx` 是由 `koa` 传入的，封装了 `request` 和 `response` 的变量，我们可以通过它访问 `request` 和 `response`，`next` 是 `koa` 传入的将要处理的下一个异步函数。 
 
-<br> 
+<br/> 
 
-## <a>&sect; ctx 作用</a> 
+这样的写法虽然能够处理简单的应用，但是，一旦要处理的 `URL` 多起来就会显得特别笨重。所以我们可以借助 `koa-router` 来更简单的实现这一功能。 
 
-<br> 
+<br/>
 
-`ctx` 作为上下文使用，包含了基本的 `ctx.request` 和 `ctx.response`。另外，`Koa` 内部对一些常用的属性或者方法做了代理操作，使得我们可以直接通过 `ctx` 获取。比如，`ctx.request.url` 可以写成 `ctx.url`。 
+## 安装 koa-router 
 
-<br> 
+<br/> 
 
-除此之处，`Koa` 还约定了一个中间件的存储空间 `ctx.state`，通过 `state` 可以存储一些数据，比如用户数据，版本信息等。如果你使用 `webpack` 打包的话，可以使用中间件将加载资源的方法作为 `ctx.state` 的属性传入到 `view` 层，方便获取资源路径。
-
-<br> 
-
-## <a>&sect; next 作用</a> 
-
-<br>
-
-`next` 参数的作用，是将处理的控制权转交给下一个中间件，而 `next()` 后面的代码，将会在下一个中间件及后面的中间件(如果有的话)执行结束后再执行。 
-
-**注意：** 中间件的顺序很重要！ 
- 
-<br>  
-
-我们重写 `app.js` 来解释下中间件的流转过程： 
+通过 `npm` 命令直接安装： 
 
 ```js
-// 按照官方示例
-const Koa = require('koa')
-const app = new Koa()
+npm install koa-router
+``` 
 
-// 记录执行的时间
-app.use(async (ctx, next)=>{
-  let stime = new Date().getTime()
-  await next()
-  let etime = new Date().getTIme()
-  ctx.response.type = 'text/html'
-  ctx.response.body = '<h1>Hello World</h1>'
-  console.log(`请求地址: ${ctx.path}，响应时间：${etime - stime}ms`)
+<br/> 
+
+## 使用方法 
+
+<br/> 
+
+在 `app.js` 中使用 `koa-router` 来处理 `URL`，代码如下： 
+
+```js
+  const Koa = require('koa')
+  // 注意require('koa-router')返回的是函数:
+  const router = require('koa-router')()
+  const app = new Koa()
+
+  // add url-route:
+  router.get('/', async (ctx, next) => {
+      ctx.response.body = `<h1>index page</h1>`
+  })
+
+  router.get('/home', async (ctx, next) => {
+      ctx.response.body = '<h1>HOME page</h1>'
+  })
+
+  router.get('/404', async (ctx, next) => {
+      ctx.response.body = '<h1>404 Not Found</h1>'
+  })
+
+  // add router middleware:
+  app.use(router.routes())
+
+  app.listen(3000, ()=>{
+    console.log('server is running at http://localhost:3000')
+  })
+``` 
+
+运行 `app.js`： 
+
+```js
+node app.js
+``` 
+
+<br/> 
+
+在浏览器中访问 `http://localhost:3000` 
+
+<div align="center">
+  <img src="./images/index.png" width="640"/>
+</div> 
+
+<br/>
+
+在浏览器中访问 `http://localhost:3000/home` 
+
+<div align="center">
+  <img src="./images/home.png" width="640"/>
+</div> 
+
+<br/>
+
+在浏览器中访问 `http://localhost:3000/404` 
+
+<div align="center">
+  <img src="./images/404.png" width="640"/>
+</div> 
+
+<br/> 
+
+当然，除了 `GET` 方法，`koa-router` 也支持处理其他请求方法，比如： 
+
+```js
+router
+  .get('/', function (ctx, next) {
+    ctx.body = 'Hello World!';
+  })
+  .post('/users', function (ctx, next) {
+    // ... 
+  })
+  .put('/users/:id', function (ctx, next) {
+    // ... 
+  })
+  .del('/users/:id', function (ctx, next) {
+    // ... 
+  })
+  .all('/users/:id', function (ctx, next) {
+    // ... 
+  });
+``` 
+
+<br/> 
+
+## 其他特性 
+
+<br/> 
+
+### 命名路由 
+
+<br/>
+
+我们可以为路由命名，这样，在开发过程中我们能够很方便的生成和重命名路由： 
+
+```js
+router.get('user', '/users/:id', function (ctx, next) {
+ // ... 
 });
-
-app.use(async (ctx, next) => {
-  console.log('中间件1 doSoming')
-  await next();
-  console.log('中间件1 end')
-})
-
-app.use(async (ctx, next) => {
-  console.log('中间件2 doSoming')
-  await next();
-  console.log('中间件2 end')
-})
-
-app.use(async (ctx, next) => {
-  console.log('中间件3 doSoming')
-  await next();
-  console.log('中间件3 end')
-})
-
-app.listen(3000, () => {
-  console.log('server is running at http://0.0.0.0:3000')
-})
+ 
+router.url('user', 3);
+// => "/users/3" 
 ``` 
 
-<br> 
+<br/>
 
-运行起来后，控制台显示： 
+### 多中间件 
 
-```txt
-server is running at http://0.0.0.0:3000
+```js
+  router.get(
+    '/users/:id',
+    function (ctx, next) {
+      return User.findOne(ctx.params.id).then(function(user) {
+        ctx.user = user;
+        next();
+      });
+    },
+    function (ctx) {
+      console.log(ctx.user);
+      // => { id: 17, name: "Alex" } 
+    }
+  );
 ``` 
 
-<br> 
+<br/>
 
-然后打开浏览器，访问 `http://0.0.0.0:3000`，控制台显示内容更新为： 
+### 嵌套路由 
 
-```txt
-server is running at http://0.0.0.0:3000
-中间件1 doSoming
-中间件2 doSoming
-中间件3 doSoming
-中间件3 end
-中间件2 end
-中间件1 end
-请求地址: /，响应时间：2ms
+```js
+  let forums = new Router();
+  let posts = new Router();
+  
+  posts.get('/', function (ctx, next) {...});
+  posts.get('/:pid', function (ctx, next) {...});
+  forums.use('/forums/:fid/posts', posts.routes(), posts.allowedMethods());
+  
+  // responds to "/forums/123/posts" and "/forums/123/posts/123" 
+  app.use(forums.routes());
+``` 
+
+<br/> 
+
+### 路由前缀 
+
+```js
+  let router = new Router({
+    prefix: '/users'
+  });
+  
+  router.get('/', ...); // responds to "/users" 
+  router.get('/:id', ...); // responds to "/users/:id" 
 ```
 
-从结果上可以看到，流程是一层层的打开，然后一层层的闭合，像是剥洋葱一样 —— 洋葱模型。
+<br/> 
 
-<br> 
-
-此外，如果一个中间件没有调用 `await next()`，会怎样呢？答案是『后面的中间件将不会执行』。 
-
-<br> 
-
-下一节中，我们将学习下如何响应浏览器的各种请求。 
-
+下一节，我们将讲述下项目中常见的几种请求写法及参数解析。
 
 
