@@ -48,7 +48,7 @@
 
 <br/>
 
-## <a>&sect; 安装 koa-router</a> 
+## 安装 koa-router 
 
 <br/> 
 
@@ -60,7 +60,7 @@ npm install koa-router
 
 <br/> 
 
-## <a>&sect; 使用方法</a> 
+## 使用方法 
 
 <br/> 
 
@@ -148,7 +148,7 @@ router
 
 <br/> 
 
-## <a>&sect; 其他特性</a> 
+## 其他特性 
 
 <br/> 
 
