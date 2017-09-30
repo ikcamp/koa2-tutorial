@@ -1,0 +1,24 @@
+{% extends "common/layout-home.html" %} 
+{% block homeBanner %}
+<div class="banner_box">
+    <div class="banner_inner">
+        <h2 class="slogan">汇聚天下英才</h2>
+        <p class="des">iKcamp是由沪江Web前端团队发起的自由组织<br>我们追随JavaScript这门语言所秉持的精神，为ITer提供完善的在线学习平台和知识体系</p>
+        <a href="/login" title="gogogo" class="btn" id="gogogo">进入战场</a>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="hp-dialog">
+  <div class="hp-box">
+    <form action="/user/register" method="post">
+      <h1>到达战场</h1>
+      <p class="error">{{content}}</p>
+      <input type="text" name="name" placeholder="请输入用户名：ikcamp">
+      <input type="password" name="password" placeholder="请输入密码：123456">
+      <button>GoGoGo</button>
+    </form>
+  </div>
+</div>
+<div class="hp-overlay"></div>
+{% endblock %}
