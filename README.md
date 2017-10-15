@@ -47,7 +47,7 @@ console.log('Hello World')
 ├── package.json
 ```
 
-打开 `koa2-tutorial/` 并输入：
+打开控制台，进入目录 `koa2-tutorial/` 并输入：
 
 ```js
 node app.js
