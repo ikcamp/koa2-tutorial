@@ -53,7 +53,9 @@ console.log('Hello World')
 node app.js
 ```
 
-成功输出 `Hello World`，说明环境正常。至此，我们的准备工作完成。下面我们会基于 `Koa2` 启动服务器。
+成功输出 `Hello World`，说明环境正常。至此，我们的准备工作完成。
+
+下面我们会基于 `Koa2` 启动服务器。
 
 <br>
 
