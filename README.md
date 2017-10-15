@@ -3,7 +3,7 @@
 <br>
 
 ## 环境准备
-由于 `koa2` 需要应用 `async/await` 等新语法，所以请保证 `node` 环境在 `7.6` 版本以上。
+由于 `koa2` 已经开始使用 `async/await` 等新语法，所以请保证 `node` 环境在 `7.6` 版本以上。
 
 <br>
 
@@ -17,7 +17,9 @@
       - windows 系统安装 nvm [https://github.com/coreybutler/nvm-windows](https://github.com/coreybutler/nvm-windows)
       - Ubuntu 系统安装 nvm [https://github.com/creationix/nvm](https://github.com/creationix/nvm)
 
-## 准备工作
+<br>
+
+## 项目初始化
 
 <br>
 
@@ -32,7 +34,7 @@
 npm init
 ```
 
-项目初始化完成后，进入到我们创建的目录里，新建文件 `app.js` 并在里面写下：
+项目初始化完成后，在我们创建的目录里，新建文件 `app.js` 并在里面写下：
 
 ```js
 console.log('Hello World')
@@ -45,13 +47,13 @@ console.log('Hello World')
 ├── package.json
 ```
 
-打开控制台，进入到 `koa2-tutorial/` 目录并输入：
+打开控制台，进入到我们的项目目录 `koa2-tutorial/` 并输入：
 
 ```js
 node app.js
 ```
 
-成功输出 `Hello World`，说明环境正常。至此，我们的准备工作完成，下面我们会基于 `Koa2` 启动服务器。
+成功输出 `Hello World`，说明环境正常。至此，我们的准备工作完成。下面我们会基于 `Koa2` 启动服务器。
 
 <br>
 
@@ -62,8 +64,6 @@ node app.js
 ```js
 npm install koa
 ```
-
-<br>  
 
 重写 `app.js`，增加如下代码： 
 
@@ -98,10 +98,10 @@ app.listen(3000, () => {
 })
 ``` 
 
-重启服务器并再次访问，页面将正常显示 `Hello World`。 
+重启服务器并再次访问，这时页面将正常显示 `Hello World`。
 
 <br>  
 
-我们增加的代码里面，用到了 `Koa` 的中间件，下一节我们讲述下中间件的用法。
+在我们增加的代码里面，用到了 `Koa` 的中间件。那么什么是中间件呢？在下一节我们会为大家详细讲述。
 
 <br>
