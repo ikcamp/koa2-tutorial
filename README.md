@@ -7,23 +7,23 @@
 
 <br/> 
 
-## 那么，什么是模板引擎呢？ 
+## 什么是模板引擎？ 
 
-模板引擎是为了使用户界面与业务数据分离而产生的，它可以生成特定格式的文档，用于网站的模板引擎就会生成一个标准的 `HTML` 文档。 
+模板引擎是为了使用户界面与业务数据分离而产生的，可以生成特定格式的文档。例如，用于网站的模板引擎会生成一个标准的 `HTML` 文档。 
 
 <br/> 
 
-市面上常见的模板引擎有很多，比如：`Smarty`、`Jade`、`Ejs`、`Nunjucks` 等，想用哪种模板看个人喜好。支持 `Koa` 的第三方中间件也有很多，比如 `koa-views`、`koa-nunjucks-2` 等。 
+市面上常见的模板引擎很多，例如：`Smarty`、`Jade`、`Ejs`、`Nunjucks` 等，可以根据个人喜好进行选择。`koa-views`、`koa-nunjucks-2` 等支持 `Koa` 的第三方中间件也可以自行选择。 
 
 <br/>
 
-这里我们选择 `koa-nunjucks-2` 作为模板引擎。`Nunjucks` 是 `Mozilla` 开发的一个纯 `js` 编写的模板引擎，既可以用在 `Node` 环境下，又可以运行在浏览器端。而 `koa-nunjucks-2` 是基于 `Nunjucks` 封装出来的第三方中间件，完美支持 `Koa2`，同时，`Nunjucks` 也是官方推荐的。 
+本项目中，我们使用 `koa-nunjucks-2` 作为模板引擎。`Nunjucks` 是 `Mozilla` 开发的，纯 `js` 编写的模板引擎，既可以用在 `Node` 环境下，也可以运行在浏览器端。`koa-nunjucks-2` 是基于 `Nunjucks` 封装出来的第三方中间件，完美支持 `Koa2`。 
 
 <br/>
 
 ## Nunjucks 介绍 
 
-`Nunjucks` 有几个特别不错的特性需要我们了解 
+首先我们需要了解 `Nunjucks` 的几个特性 
 
 ### 简单语法 
 
@@ -38,7 +38,7 @@
   {{ foo["bar"] }}
 ``` 
 
-如果变量的值为 `undefined` 或 `null` 将不显示。 
+如果变量的值为 `undefined` 或 `null` ，将不予显示。 
 
 <br/>  
 
@@ -91,7 +91,7 @@
 
 `macro` 宏 
 
-宏：可以定义可复用的内容，类似与编程语言中的函数 
+宏：定义可复用的内容，类似于编程语言中的函数 
 
 ```js
   {% macro field(name, value='', type='text') %}
@@ -102,7 +102,7 @@
   {% endmacro %}
 ``` 
 
-现在 `field` 可以当作函数一样使用了： 
+接下来就可以把 `field` 当作函数一样使用： 
 
 ```js
   {{ field('user') }}
@@ -111,7 +111,7 @@
 
 <br/> 
 
-更多的语法内容，请查阅[官方文档](http://mozilla.github.io/nunjucks/cn/templating.html) 
+更多语法内容请查阅[官方文档](http://mozilla.github.io/nunjucks/cn/templating.html) 
 
 <br/> 
 
@@ -119,7 +119,7 @@
 
 <br/> 
 
-网站常见的结构大多是：头部、中间体、尾部，而头部和尾部基本保持不动。这时候我们就可以运用**继承**功能。 
+网页常见的结构大多是头部、中间体加尾部，同一个网站下的多个网页，头部和尾部内容通常来说基本一致。于是我们可以采用**继承**功能来进行编写。 
 
 <br/> 
 
@@ -154,11 +154,11 @@
   </html>
 ``` 
 
-`layout` 定义了五个模块，分别命名为：`head`、`header`、`body`、`footer`、`content`。一般情况下，`header` 和 `footer` 是公用的，基本不动。业务代码只需要修改 `body` 内容体、头部 `head` 引入业务样式表、底部 `content` 引入业务脚本。 
+`layout` 定义了五个模块，分别命名为：`head`、`header`、`body`、`footer`、`content`。`header` 和 `footer` 是公用的，因此基本不动。业务代码的修改只需要在 `body` 内容体中进行、业务样式表和业务脚本分别在头部 `head` 和底部 `content` 中引入。 
 
 <br/> 
 
-我们再定义一个业务级别的视图页面：`home.html` 
+接下来我们再定义一个业务级别的视图页面：`home.html` 
 
 ```html
   {% extends 'layout.html' %}
@@ -178,7 +178,7 @@
 
 <br/>
 
-那么最终的视图 `home.html` 输出后就如下所示： 
+最终的 `home.html` 输出后如下所示： 
 
 ```html
   <html>
@@ -201,11 +201,7 @@
 
 ### 安全性 
 
-对特殊字符进行转义，防止 `Xss` 攻击，比如变量是个字符串 `Hello World<script>alert(0)</script>`，如果不进行转义处理，渲染到页面后，就会自动执行脚本，弹出提示框。 
-
-<br/> 
-
-回归到我们的代码中，来学习下如何在项目中去运用。 
+请对特殊字符进行转义，防止 `Xss` 攻击。若在页面上写入 `Hello World<script>alert(0)</script>` 这类字符串变量，并且不进行转义，页面渲染时该脚本就会自动执行，弹出提示框。  
 
 <br/> 
 
@@ -247,7 +243,7 @@ npm install koa-nunjucks-2
 
 <br/> 
 
-之前项目中，我们把视图写在了 `controller/home` 里面，现在我们把它迁移到 `views` 中： 
+在之前的项目中，视图被写在了 `controller/home` 里面，现在我们把它迁移到 `views` 中： 
 
 新建 `views/home/login.html`:
 
@@ -286,11 +282,11 @@ npm install koa-nunjucks-2
   },
 ``` 
 
-**注意：** 这里我们用了 `await`，文件读取是异步的，需要时间等待，所以要保证读取之后再响应请求。 
+**注意：** 这里我们使用了 `await` 来异步读取文件。因为需要等待，所以必须保证读取文件之后再进行请求的响应。 
 
 <br/>
 
-增加了 `views` 层之后，视图功能上，还不完善，我们还需要增加静态资源目录。当然，如果能直接用静态服务器更好。 
+增加了 `views` 层之后，视图功能还不算完善，我们还需要增加静态资源目录。当然，如果能直接使用静态服务器的话更好。 
 
 <br/> 
 
@@ -298,11 +294,11 @@ npm install koa-nunjucks-2
 
 <br/> 
 
-这里我们应用第三方中间件： `koa-static` 
+这里我们使用第三方中间件： `koa-static` 
 
 <br/>
 
-### 安装并应用 
+### 安装并使用
 
 安装 `koa-static`： 
 
@@ -345,7 +341,7 @@ npm install koa-static
 
 <br/> 
 
-做完这些后，我们把项目的视图美化下，这样看起来也显得高大上。
+之后我们对项目的视图进行美化，使之更为赏心悦目。
 
 <br/> 
 
@@ -353,7 +349,7 @@ npm install koa-static
 
 <br/> 
 
-我们在 `/public/home/` 目录下，增加一个样式文件 `main.css`，样式如下： 
+在 `/public/home/` 目录下新增样式文件 `main.css`，内容如下： 
 
 ```css
   *{
@@ -637,7 +633,7 @@ npm install koa-static
 
 <br/>
 
-然后修改下 `views` 视图文件，按照继承的方式，提取出公用文件
+然后修改 `views` 视图文件，按照继承的方式提取出公用部分。
 
 <br/> 
 
@@ -669,7 +665,7 @@ npm install koa-static
 
 <br/> 
 
-新建 `/views/common/layout.html`，注意，这里面有个模板变量 `title` 
+新建 `/views/common/layout.html`。注意，此处有模板变量 `title` 。
 
 ```html
   <!DOCTYPE html>
@@ -697,11 +693,11 @@ npm install koa-static
 
 <br/> 
 
-这时候 `layout.html` 就是我们的基础页面，现在我们再为 `home` 创建一个专用的 `layout-home.html`，并在里面引用我们之前创建的样式表: 
+`layout.html` 就是我们的基础页面。现在我们再为 `home` 创建专用的 `layout-home.html`，并在里面引用之前创建的样式表: 
 
 <br/> 
 
-新建 `/views/common/layout-home.html`，注意，我们在 `body` 模块里面又增加了一个 `homeBanner` 模块：
+新建 `/views/common/layout-home.html`。注意，我们在 `body` 模块里又增加了一个 `homeBanner` 模块：
 
 ```html
 {% extends "./layout.html" %} 
@@ -742,7 +738,7 @@ npm install koa-static
 
 <br/> 
 
-公用的做完之后，我们重写下 `home` 交互页面，这里我们把登录功能的视图美化下，有主页、有登录、也有登录后的响应页面。
+公用部分提取完成之后，重写 `home` 交互页面。此时我们对登录功能的视图进行美化，有主页，登录，以及登录后的响应页面。
 
 <br/>
 
@@ -815,7 +811,7 @@ npm install koa-static
 
 <br/> 
 
-增加完成后，我们需要修改下 `home` 的处理逻辑 
+增加完成后，需要对 `home` 的处理逻辑进行修改
 
 <br/> 
 
@@ -878,7 +874,7 @@ npm install koa-static
 
 <br/> 
 
-运行我们的代码，并通过浏览器访问 `localhost:3000`: 
+运行代码，并通过浏览器访问 `localhost:3000`: 
 
 <div align="center">
   <img src="./images/index.jpeg" width="640"/>
@@ -910,7 +906,7 @@ npm install koa-static
 
 <br/> 
 
-目前我们的基本功能都已经完善了，结构目录如下： 
+目前，项目的基本功能都已完善。结构目录如下： 
 
 ```txt
   ├── controller/
@@ -937,4 +933,4 @@ npm install koa-static
 
 <br/> 
 
-后面的章节中，我们将进一步完善其他功能，比如：`JSON` 数据传递、错误处理机制、日志记录功能等。
+在后面的章节中，我们将进一步完善其他功能，例如 `JSON` 数据传递，错误处理机制，日志记录功能等。
