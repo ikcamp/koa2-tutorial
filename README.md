@@ -13,27 +13,29 @@ app.use(async (ctx, next)=>{
 })
 ``` 
 
-它的作用是：每收到一个 `http` 请求，`Koa` 都会调用通过 `app.use()` 注册的 `async` 函数，并传入了两个参数 `ctx` 和 `next`。 
+它的作用是：每收到一个 `http` 请求，`Koa` 都会调用通过 `app.use()` 注册的 `async` 函数，同时为该函数传入 `ctx` 和 `next` 两个参数。而这个 `async` 函数就是我们所说的中间件。
+
+下面我们简单介绍一下传入中间件的两个参数。
 
 <br> 
 
-## ctx 作用 
+## ctx
 
 <br> 
 
-`ctx` 作为上下文使用，包含了基本的 `ctx.request` 和 `ctx.response`。另外，`Koa` 内部对一些常用的属性或者方法做了代理操作，使得我们可以直接通过 `ctx` 获取。比如，`ctx.request.url` 可以写成 `ctx.url`。 
+`ctx` 作为上下文使用，包含了基本的 `ctx.request` 和 `ctx.response`。另外，还对 `Koa` 内部对一些常用的属性或者方法做了代理操作，使得我们可以直接通过 `ctx` 获取。比如，`ctx.request.url` 可以写成 `ctx.url`。
 
 <br> 
 
-除此之处，`Koa` 还约定了一个中间件的存储空间 `ctx.state`，通过 `state` 可以存储一些数据，比如用户数据，版本信息等。如果你使用 `webpack` 打包的话，可以使用中间件将加载资源的方法作为 `ctx.state` 的属性传入到 `view` 层，方便获取资源路径。
+除此之外，`Koa` 还约定了一个中间件的存储空间 `ctx.state`。通过 `state` 可以存储一些数据，比如用户数据，版本信息等。如果你使用 `webpack` 打包的话，可以使用中间件，将加载资源的方法作为 `ctx.state` 的属性传入到 `view` 层，方便获取资源路径。
 
 <br> 
 
-## next 作用 
+## next
 
 <br>
 
-`next` 参数的作用，是将处理的控制权转交给下一个中间件，而 `next()` 后面的代码，将会在下一个中间件及后面的中间件(如果有的话)执行结束后再执行。 
+`next` 参数的作用是将处理的控制权转交给下一个中间件，而 `next()` 后面的代码，将会在下一个中间件及后面的中间件（如果有的话）执行结束后再执行。
 
 **注意：** 中间件的顺序很重要！ 
  
@@ -47,7 +49,7 @@ const Koa = require('koa')
 const app = new Koa()
 
 // 记录执行的时间
-app.use(async (ctx, next)=>{
+app.use(async (ctx, next) => {
   let stime = new Date().getTime()
   await next()
   let etime = new Date().getTime()
@@ -169,7 +171,7 @@ server is running at http://localhost:3000
 
 <br>
 
-下一节中，我们将学习下如何响应浏览器的各种请求。 
+下一节中，我们将学习下如何响应浏览器的各种请求。
 
 
 
