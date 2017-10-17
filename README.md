@@ -1,5 +1,5 @@
 # 路由 koa-router 
- > 上一节我们学习了中间件的基本概念，本节主要带大家学习下 `koa-router` 路由中间件的使用方法。 
+ > 上一节我们学习了中间件的基本概念，本节主要带大家学习下路由中间件 `koa-router` 的使用方法。 
 
 <br/> 
 
@@ -7,7 +7,7 @@
 
 <br/> 
 
-要实现上述功能，如果不借助 `koa-router` 或者其他路由中间件，我们自己去处理路由，那么写法可能如下所示，我们修改 `app.js`： 
+要实现上述功能，如果不借助 `koa-router` 或者其他路由中间件，我们自己去处理路由，那么写法可能如下所示，修改 `app.js`： 
 
 ```js
   const Koa = require('koa')
@@ -40,7 +40,7 @@
   })
 ``` 
 
-上述代码中，由 `async` 标记的函数称为异步函数，在异步函数中，可以用 `await` 调用另一个异步函数，这两个关键字将在 `ES7` 中引入。参数 `ctx` 是由 `koa` 传入的，封装了 `request` 和 `response` 的变量，我们可以通过它访问 `request` 和 `response`，`next` 是 `koa` 传入的将要处理的下一个异步函数。 
+上述代码中，由 `async` 标记的函数称为『异步函数』。在异步函数中，可以用 `await` 调用另一个异步函数，这两个关键字将在 `ES7` 中引入。参数 `ctx` 是由 `koa` 传入的，封装了 `request` 和 `response` 的变量，我们可以通过它访问 `request` 和 `response`，`next` 是 `koa` 传入的将要处理的下一个异步函数。 
 
 <br/> 
 
@@ -68,12 +68,12 @@ npm install koa-router
 
 ```js
   const Koa = require('koa')
-  // 注意require('koa-router')返回的是函数:
+  // 注意 require('koa-router') 返回的是函数:
   const router = require('koa-router')()
   const app = new Koa()
 
-  // add url-route:
-  router.get('/', async (ctx, next) => {
+  // 添加路由
+  router.get('/', async (ctx, next) => {
       ctx.response.body = `<h1>index page</h1>`
   })
 
@@ -85,8 +85,8 @@ npm install koa-router
       ctx.response.body = '<h1>404 Not Found</h1>'
   })
 
-  // add router middleware:
-  app.use(router.routes())
+  // 调用路由中间件
+  app.use(router.routes())
 
   app.listen(3000, ()=>{
     console.log('server is running at http://localhost:3000')
