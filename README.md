@@ -11,7 +11,7 @@
 
 <br/>
 
-当我们捕获到 `Get` 请求后，一般都需要解析出来请求带过来的数据。数据传递过来的方式一般有两种： 
+当我们捕获到 `Get` 请求后，一般都需要把请求带过来的数据解析出来。数据传递过来的方式一般有两种： 
 
 <br/> 
 
@@ -56,11 +56,9 @@ http://localhost:3000/home?id=12&name=ikcamp
 
 <br/>
 
-运行代码，并通过浏览器访问，这时候我们查看控制台显示： 
+运行代码，并通过浏览器访问 `http://localhost:3000/home?id=12&name=ikcamp`，然后打开控制台会看到下面的输出内容： 
 
 ```txt
-// 浏览器打开访问 http://localhost:3000/home?id=12&name=ikcamp
-
 { id: '12', name: 'ikcamp' }
 id=12&name=ikcamp
 ``` 
@@ -87,10 +85,9 @@ http://localhost:3000/home/12/ikcamp
 
 <br/> 
 
-运行代码，并通过浏览器访问，然后查看下控制台显示的日志信息： 
+运行代码，并通过浏览器访问 `http://localhost:3000/home/12/ikcamp`，然后查看下控制台显示的日志信息： 
 
 ```txt
-// 请求地址 http://localhost:3000/home/12/ikcamp 
 { id: '12', name: 'ikcamp' } 
 ``` 
 
@@ -104,7 +101,7 @@ http://localhost:3000/home/12/ikcamp
 
 <br/> 
 
-### koa-bodyparser 说：『是时候登场了！』。 
+### koa-bodyparser 说：『是时候登场了！』 
 
 <br/> 
 
