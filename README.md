@@ -1,4 +1,4 @@
-<h1 align="center">📖 基于koa搭建node实战项目教程</h1>
+<h1 align="center">基于koa搭建node实战项目教程</h1>
 
 
 <h4 align="right">🇨🇳  喜迎十九大 🇨🇳</h1>
@@ -66,6 +66,6 @@ git checkout 0-start
 <br>
 
 ## 🇨🇳  完整代码  
-> 教程的完整代码在分支 `完整代码` 中，请自行[查阅](https://github.com/ikcamp/koa2-tutorial/tree/master)
+> 教程的完整代码在分支 `完整代码` 中，请自行[查阅📖 ](https://github.com/ikcamp/koa2-tutorial/tree/master)
 
 <br>
