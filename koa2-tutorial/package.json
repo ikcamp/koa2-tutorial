@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BruceCham/koa2-tutorial.git"
+    "url": "git+https://github.com/ikcamp/koa2-tutorial.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BruceCham/koa2-tutorial/issues"
+    "url": "https://github.com/ikcamp/koa2-tutorial/issues"
   },
-  "homepage": "https://github.com/BruceCham/koa2-tutorial#readme",
+  "homepage": "https://github.com/ikcamp/koa2-tutorial#readme",
   "dependencies": {
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
