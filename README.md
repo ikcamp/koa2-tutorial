@@ -44,6 +44,8 @@
 ## 🇨🇳  学习方式
 教程以 `git` 分支的方式管理
 
+<br/>
+
 1. 通过 `git` 把项目复制到本地
 ```git
 git clone https://github.com/ikcamp/koa2-tutorial
