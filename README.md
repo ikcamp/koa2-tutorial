@@ -66,6 +66,6 @@ git checkout 0-start
 <br>
 
 ## 🇨🇳  完整代码  
-> 教程的完整代码在分支 `完整代码` 中，请自行[查阅📖 ](https://github.com/ikcamp/koa2-tutorial/tree/master)
+> 教程的完整代码在主干 `master` 中，请自行[查阅📖 ](https://github.com/ikcamp/koa2-tutorial/tree/master)
 
 <br>
