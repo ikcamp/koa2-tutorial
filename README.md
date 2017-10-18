@@ -292,8 +292,6 @@ npm install koa-nunjucks-2
 
 ## 指定静态资源目录 
 
-<br/> 
-
 这里我们使用第三方中间件： `koa-static` 
 
 <br/>
