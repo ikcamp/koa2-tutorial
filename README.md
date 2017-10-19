@@ -1,5 +1,5 @@
 # 处理 POST/GET 请求 
- > 在学习了 `Router` 之后，我们就可以用它来处理 `POST/GET` 请求。 
+ > 在学习了 `koa-router` 之后，我们就可以用它来处理 `POST/GET` 请求。 
 
 <br/> 
 
@@ -149,11 +149,7 @@ npm i koa-bodyparser -S
   })
 ```
 
-然后我们来试着写一个简单的表单提交实例
-
-<br/>
-
-修改 `app.js` 增加如下代码，实现增加表单页面的路由：
+然后我们来试着写一个简单的表单提交实例。修改 `app.js` 增加如下代码，实现增加表单页面的路由：
 
 ```js
   // 增加返回表单页面的路由
@@ -173,13 +169,13 @@ npm i koa-bodyparser -S
 
 <br/>
 
-修改 `app.js` 增加如下代码，实现 `post` 表单提交对应的路由： 
+继续修改 `app.js` 增加如下代码，实现 `post` 表单提交对应的路由： 
 
 ```js
   // 增加响应表单请求的路由
   router.post('/user/register',async(ctx, next)=>{
     let {name, password} = ctx.request.body
-    if( name == 'ikcamp' && password == '123456' ){
+    if( name === 'ikcamp' && password === '123456' ){
       ctx.response.body = `Hello， ${name}！`
     }else{
       ctx.response.body = '账号信息错误'
