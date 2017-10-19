@@ -61,6 +61,7 @@ node app.js
 运行如下命令，安装 `Koa` （版本信息会自动保存在 `package.json` 中）
 
 ```js
+// 安装 koa，并将版本信息保存在 package.json 中
 npm i koa -S
 ```
 
