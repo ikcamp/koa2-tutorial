@@ -108,7 +108,7 @@ http://localhost:3000/home/12/ikcamp
 首先，安装 `koa-bodyparser` 包： 
 
 ```js
-npm install koa-bodyparser
+npm i koa-bodyparser -S
 ``` 
 
 <br/> 
