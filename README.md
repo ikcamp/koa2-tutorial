@@ -64,7 +64,7 @@ ctx.body = JSON.stringify(json)
 
 <br/> 
 
-我们把上面的代码提取出来一个中间件，这样更方便代码的维护性和扩展性 
+我们把上面的代码提取成一个中间件，这样更方便代码的维护性和扩展性 
 
 <br/> 
 
@@ -122,7 +122,6 @@ const Koa = require('koa')
 const path = require('path')
 const bodyParser = require('koa-bodyparser')
 const nunjucks = require('koa-nunjucks-2')
-// 引入 koa-static
 const staticFiles = require('koa-static')
 
 const app = new Koa()
@@ -132,7 +131,6 @@ const middleware = require('./middleware')
 
 middleware(app)
 
-// 指定 public目录为静态资源目录，用来存放 js css images 等
 app.use(staticFiles(path.resolve(__dirname, "./public")))
 
 app.use(nunjucks({
