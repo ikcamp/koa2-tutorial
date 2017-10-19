@@ -12,5 +12,5 @@ module.exports = (app) => {
   router.post('/user/register', HomeController.register)
   
   app.use(router.routes())
-     .use(router.allowedMethods())
+    .use(router.allowedMethods())
 }
