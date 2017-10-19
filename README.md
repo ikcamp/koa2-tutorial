@@ -11,7 +11,7 @@
 
 <br>
 
-  - 直接安装 node.js 7.6 ：node.js官网地址 [https://nodejs.org](https://nodejs.org)
+  - 直接安装 node.js ：node.js官网地址 [https://nodejs.org](https://nodejs.org)
   - nvm管理多版本 node.js ：可以用nvm 进行node版本进行管理
       - Mac 系统安装 nvm [https://github.com/creationix/nvm#manual-install](https://github.com/creationix/nvm#manual-install)
       - windows 系统安装 nvm [https://github.com/coreybutler/nvm-windows](https://github.com/coreybutler/nvm-windows)
@@ -61,7 +61,7 @@ node app.js
 运行如下命令，安装 `Koa` （版本信息会自动保存在 `package.json` 中）
 
 ```js
-npm install koa
+npm install koa -S
 ```
 
 重写 `app.js`，增加如下代码： 
