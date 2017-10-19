@@ -33,6 +33,7 @@
    - [POST/GET请求](https://github.com/ikcamp/koa2-tutorial/tree/3-router-request)
    - [代码分层](https://github.com/ikcamp/koa2-tutorial/tree/4-refactor)
    - [视图nunjucks](https://github.com/ikcamp/koa2-tutorial/tree/5-nunjucks)
+   - [处理静态资源](https://github.com/ikcamp/koa2-tutorial/tree/6-static)
 - 提升篇
    - [解析JSON](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-1)
    - [记录日志](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-2) 
