@@ -1,10 +1,15 @@
 # 路由 koa-router
 
 上一节我们学习了中间件的基本概念，本节主要带大家学习下 `koa-router` 路由中间件的使用方法。
+
 <br/>
+
 路由是用于描述 `URL` 与处理函数之间的对应关系的。比如用户访问 `http://localhost:3000/`，那么浏览器就会显示 `index` 页面的内容，如果用户访问的是 `http://localhost:3000/home`，那么浏览器应该显示 `home` 页面的内容。
+
 <br/>
+
 要实现上述功能，如果不借助 `koa-router` 或者其他路由中间件，我们自己去处理路由，那么写法可能如下所示：
+
 
 ```
 const Koa = require('koa');
@@ -38,21 +43,26 @@ console.log('app started at port 3000...');
 ```
 
 把上述代码复制并覆盖到 `app.js` 中，然后执行以下命令启动 `node` 程序:
+
 ```
 nodemon app.js
 ```
 启动之后在浏览器中分别访问 `http://localhost:3000/`、`http://localhost:3000/home`、`http://localhost:3000/404` 就能看到相应的页面了。
+
 <br/>
+
 `nodemon` 是一个管理 `node` 应用的工具。它能够在我们修改 `node` 程序后自动重启，比较轻量而且用于本地调试十分方便。可以通过下面的命令来全局安装:
 ```
 npm install nodemon -g
 ```
 在产线上我们使用更多的工具是 `pm2`，它和 `nodemon` 类似，但是功能比较全面，大家可以自行搜索学习下。
+
 <br/>
 
 上述 `app.js` 的代码中，由 `async` 标记的函数称为『异步函数』，在异步函数中，可以用 `await` 调用另一个异步函数，`async` 和 `await` 这两个关键字将在 ES7 中引入。参数 `ctx` 是由 `koa` 传入的，我们可以通过它来访问 `request` 和 `response`，`next` 是 `koa` 传入的将要处理的下一个异步函数。
 
-**注意：由于 node 在 v7.6.0 中才支持 `async` 和 `await`，所以在运行 app.js 之前请确保 node 版本正确，或者使用一些第三方的 async 库来支持。 **
+**注意：由于 node 在 v7.6.0 中才支持 `async` 和 `await`，所以在运行 app.js 之前请确保 node 版本正确，或者使用一些第三方的 async 库来支持。**
+
 <br/>
 
 这样的写法能够处理简单的应用，但是，一旦要处理的 `URL` 多起来的话就会显得特别笨重。所以我们可以借助 `koa-router` 来更简单的实现这一功能。
