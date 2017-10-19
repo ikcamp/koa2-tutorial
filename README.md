@@ -35,7 +35,7 @@
    - [视图nunjucks](https://github.com/ikcamp/koa2-tutorial/tree/5-nunjucks)
    - [处理静态资源](https://github.com/ikcamp/koa2-tutorial/tree/6-static)
 - 提升篇
-   - [解析JSON](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-1)
+   - [解析JSON](https://github.com/ikcamp/koa2-tutorial/tree/7-mi-send)
    - [记录日志](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-2) 
    - [错误处理](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-3) 
    - [规范与部署](https://github.com/ikcamp/koa2-tutorial/tree/10-mi-init)
