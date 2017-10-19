@@ -61,7 +61,7 @@ node app.js
 运行如下命令，安装 `Koa` （版本信息会自动保存在 `package.json` 中）
 
 ```js
-npm install koa -S
+npm i koa -S
 ```
 
 重写 `app.js`，增加如下代码： 
