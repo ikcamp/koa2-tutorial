@@ -23,7 +23,7 @@ module.exports = (app) => {
   /**
    * 初始化log
    */
-  app.use(miLog(app.env, {
+  app.use(miLog({
     env: app.env,
     projectName: 'koa2-tutorial',
     appLogLevel: 'debug',
