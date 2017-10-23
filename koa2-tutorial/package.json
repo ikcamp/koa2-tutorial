@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/BruceCham/koa2-tutorial#readme",
   "dependencies": {
+    "ip": "^1.1.5",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^7.2.1",
-    "koa-static": "^4.0.1"
+    "koa-static": "^4.0.1",
+    "log4js": "^2.3.7"
   }
 }
