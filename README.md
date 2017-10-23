@@ -1,4 +1,4 @@
-# log 日志 
+# log 日志中间件 
 > 最困难的事情就是认识自己。
 
 <br/> 
@@ -21,7 +21,7 @@
 
 ### log4js 
 
-本项目中的 `log` 中间件是基于 `log4js 2.x` 的封装，[Log4js](https://github.com/nomiddlename/log4js-node)是 `Node.js` 中记录日志成熟的第三方模块，下文也会根据中间件的使用介绍一些 `log4js` 的使用方法。 
+本项目中的 `log` 中间件是基于 `log4js 2.x` 的封装，[Log4js](https://github.com/nomiddlename/log4js-node) 是 `Node.js` 中记录日志成熟的第三方模块，下文也会根据中间件的使用介绍一些 `log4js` 的使用方法。 
 
 <br/> 
 
