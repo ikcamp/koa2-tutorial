@@ -1,13 +1,5 @@
-const logger = require("./logger");
-
-/**
- * 中间件错误处理
- * 
- * @param {any} options 
- * @returns 
- */
+const logger = require("./logger")
 module.exports = (options) => {
-
   const loggerMiddleware = logger(options)
 
   return (ctx, next) => {
@@ -19,6 +11,6 @@ module.exports = (options) => {
         ctx.log.error(e.stack);
         ctx.state.logged = true;
         ctx.throw(e);
-    });
-  };
+    })
+  }
 }
