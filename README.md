@@ -55,7 +55,7 @@
 
 ### 初始化日志 demo 
 
-1. 安装 `log4js` 模块 
+#### 1. 安装 `log4js` 模块 
 
 ```js
 npm i log4js -S
@@ -63,7 +63,7 @@ npm i log4js -S
 
 <br/>
 
-2. `log4js` 官方示例
+#### 2. `log4js` 官方示例
 
 在 `middleware/` 目录下创建 `mi-log/demo.js`，并贴入官方示例代码： 
 
@@ -100,7 +100,7 @@ cd ./middleware/mi-log/ && node demo.js
 [2017-10-24 15:51:30.774] [FATAL] cheese - Cheese was breeding ground for listeria.
 ```
 
-**注意：**日志文件产生的位置就是当前启动环境的位置。
+**注意：** 日志文件产生的位置就是当前启动环境的位置。
 
 <br/> 
 
@@ -132,7 +132,7 @@ cd ./middleware/mi-log/ && node demo.js
 
 ### 提取日志中间件雏形 
 
-1. 提取部分变量 
+#### 1. 提取部分变量 
 
 创建 `/mi-log/logger.js` 文件，并增加如下代码： 
 
@@ -192,7 +192,7 @@ module.exports = () => {
 
 <br/> 
 
-2. 引用中间件 
+#### 2. 引用中间件 
 
 修改 `middleware/index.js`，在代码中引入中间件： 
 
@@ -257,7 +257,7 @@ logger.fatal('fatal');
 
 <br/> 
 
-1. 对不同级别的日志输出函数进行封装 
+#### 1. 对不同级别的日志输出函数进行封装 
 
 修改 `mi-log/logger.js` 文件，代码如下所示： 
 
@@ -360,7 +360,7 @@ module.exports = (app) => {
 
 <br/> 
 
-2. 封装写入的日志信息内容 
+#### 2. 封装写入的日志信息内容 
 
 上下文 `ctx` 对象中，有我们想要的很多信息，所以完全可以通过它来丰富日志内容。在这里，我们只需要修改传入的参数： 
 
@@ -394,7 +394,7 @@ module.exports = (ctx, message, commonInfo) => {
 }
 ``` 
 
-**注意：**最终返回的是字符串。 
+**注意：** 最终返回的是字符串。 
 
 <br/> 
 
@@ -476,7 +476,7 @@ module.exports = () => {
 
 <br/> 
 
-3. 增加访问日志记录 
+#### 3. 增加访问日志记录 
 
 之前的代码中，我们已经扩展了『应用日志』，这里我们再扩展下『访问日志』，对访客信息及服务器响应时间进行记录。代码很简单： 
 
@@ -561,7 +561,7 @@ module.exports = () => {
 
 ### 提取公用参数 
 
-1. 修改 `mi-log/logger.js` 文件，提取参数变量 
+#### 1. 修改 `mi-log/logger.js` 文件，提取参数变量 
 
 ```js
 const log4js = require('log4js');
@@ -643,7 +643,7 @@ module.exports = ( options ) => {
 
 <br/> 
 
-2. 修改中间件的调用 
+#### 2. 修改中间件的调用 
 
 安装依赖文件 `ip`: 
 
@@ -695,7 +695,7 @@ module.exports = (app) => {
 
 对于日志中间件里面的错误，我们也需要捕获并处理，这里，我们提取一层进行封装 
 
-1. 新建 `mi-log/index.js` 文件，代码如下： 
+#### 1. 新建 `mi-log/index.js` 文件，代码如下： 
 
 ```js
 const logger = require("./logger")
@@ -722,7 +722,7 @@ module.exports = (options) => {
 
 <br/> 
 
-2. 修改 `middleware/index.js` 的调用方法，修改内容如下 
+#### 2. 修改 `middleware/index.js` 的调用方法，修改内容如下 
 
 ```js
 // const miLog = require('./mi-log/logger')
