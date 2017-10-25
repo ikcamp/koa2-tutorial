@@ -31,6 +31,7 @@ module.exports = (opts = {}) => {
       const filePath = folder ? Path.join(folder, `${fileName}.html`) : templatePath
       // 渲染对应错误类型的视图，并传入参数对象
       try{
+        nunjucks.configure( folder ? folder : __dirname )
         const data = await nunjucks.render(filePath, {
           env: env, // 指定当前环境参数
           status: e.status || e.message, // 如果错误信息中没有 status，就显示为 message
