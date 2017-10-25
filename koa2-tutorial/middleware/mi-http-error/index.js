@@ -29,9 +29,6 @@ module.exports = (opts = {}) => {
         fileName = status
       }
       const filePath = folder ? Path.join(folder, `${fileName}.html`) : templatePath
-      console.log('============')
-      console.log(filePath)
-      console.log('============')
       // 渲染对应错误类型的视图，并传入参数对象
       try{
         const data = await nunjucks.render(filePath, {
