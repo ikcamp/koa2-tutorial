@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>未知异常</title>
+</head>
+<body>
+  <div id="error">
+    <h1>Error - {{ status }}</h1>
+    <p>未知异常</p>
+    {% if (env === 'development') %}
+    <h2>Message:</h2>
+    <pre>
+      <code>
+        {{ error }}
+      </code>
+    </pre>
+    <h2>Stack:</h2>
+    <pre>
+      <code>
+        {{ stack }}
+      </code>
+    </pre> 
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -23,6 +23,7 @@
     "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
-    "log4js": "^2.3.7"
+    "log4js": "^2.3.7",
+    "nunjucks": "^3.0.1"
   }
 }
