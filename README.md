@@ -36,8 +36,8 @@
    - [处理静态资源](https://github.com/ikcamp/koa2-tutorial/tree/6-static)
 - 提升篇
    - [解析JSON](https://github.com/ikcamp/koa2-tutorial/tree/7-mi-send)
-   - [记录日志](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-2) 
-   - [错误处理](https://github.com/ikcamp/wechat-xcx-tutorial/tree/ch2-3) 
+   - [记录日志](https://github.com/ikcamp/koa2-tutorial/tree/8-mi-log) 
+   - [错误处理](https://github.com/ikcamp/koa2-tutorial/tree/9-mi-http-error) 
    - [规范与部署](https://github.com/ikcamp/koa2-tutorial/tree/10-mi-init)
 
 <br/>
