@@ -130,7 +130,7 @@ cd ./middleware/mi-log/ && node demo.js
 
 <br/> 
 
-### 提取日志中间件雏形 
+### 日志中间件雏形 
 
 #### 1. 提取部分变量 
 
