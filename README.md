@@ -39,6 +39,10 @@
    - [记录日志](https://github.com/ikcamp/koa2-tutorial/tree/8-mi-log)
    - [错误处理](https://github.com/ikcamp/koa2-tutorial/tree/9-mi-http-error)
    - [规范与部署](https://github.com/ikcamp/koa2-tutorial/tree/10-mi-init)
+- 扩展篇-敬请期待
+   - 静态资源版本控制
+   - 增加数据库
+   - 前后端分离方案
 
 <br/>
 
