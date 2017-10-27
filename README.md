@@ -5,7 +5,7 @@
 
 当我们在访问一个站点的时候，如果访问的地址不存在(`404`)，或服务器内部发生了错误(`500`)，站点会展示出某个特定的页面，比如： 
 
-![404](./images/mi-error-1.jpg) 
+<div align="center"><img src="./images/mi-error-1.jpg" /></div> 
 
 <br/> 
 
