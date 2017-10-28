@@ -7,7 +7,12 @@ const staticFiles = require('koa-static')
 const miSend = require('./mi-send')
 const miLog = require('./mi-log')
 const miHttpError = require('./mi-http-error')
+
+// 引入规则中件间
+const miRule = require('./mi-rule')
+
 module.exports = (app) => {
+
   app.use(miHttpError({
     errorPageFolder: path.resolve(__dirname, '../errorPage')
   }))
@@ -32,6 +37,20 @@ module.exports = (app) => {
 
   app.use(bodyParser())
   app.use(miSend())
+  
+  miRule({
+    app,
+    rules: [
+      {
+        path: path.join(__dirname, '../controller'),
+        name: 'controller'
+      },
+      {
+        path: path.join(__dirname, '../service'),
+        name: 'service'
+      }
+    ]
+  })
 
   // 增加错误的监听处理
   app.on("error", (err, ctx) => {
