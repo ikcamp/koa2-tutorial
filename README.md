@@ -27,7 +27,7 @@
 
 ### 日志分类 
 
-日志可以大体上分为访问日志和应用日志。访问日志一般记录客户端对项目的访问，主要是 `http` 请求。这些数据属于运营数据，也可以反过来帮助改进和提升网站的性能和用户体验；应用日志是项目中需要特殊标记和记录的位置打印的日志，包括出现异常的情况，方便开发人员查询项目的运行状态和定位 `bug` ，应用日志包含了`debug`，`info`，`warn`，`error`等级别的日志。 
+日志可以大体上分为访问日志和应用日志。访问日志一般记录客户端对项目的访问，主要是 `http` 请求。这些数据属于运营数据，也可以反过来帮助改进和提升网站的性能和用户体验；应用日志是项目中需要特殊标记和记录的位置打印的日志，包括出现异常的情况，方便开发人员查询项目的运行状态和定位 `bug` 。应用日志包含了`debug`、`info`、`warn` 和 `error`等级别的日志。 
 
 <br/>
 
@@ -224,7 +224,7 @@ module.exports = (app) => {
 
 <br/>
 
-这时候打开浏览器并访问 `http://localhost:3000`，中间件执行并会记录下访问日志。
+这时候打开浏览器并访问 `http://localhost:3000`，中间件执行便会在相对应的日期文件中记录下访问日志。
 
 ```txt
 ├── node_modules/
@@ -236,13 +236,13 @@ module.exports = (app) => {
 
 <br/> 
 
-此时的访问日志都是简单的固定字符串，尚达不到我们的目标。我们需要增加一些细节上的东西，比如：『请求方式』、『客户端信息』、『请求源』等。
+此时的访问日志都是简单的固定字符串，尚达不到我们的目标。我们需要增加一些细节上的东西，比如：『请求方式』、『客户端信息』和『请求源』等来丰富我们的日志。
 
 <br/> 
 
 ### 丰富日志信息 
 
-从代码上不难看出，我们想要丰富的信息，都是在日志不同级别的调用上写入文件的：
+从代码上不难看出，我们想要丰富的信息，都是在日志不同级别的调用上写入文件的。所以我们需要对这几个级别的方法进行封装处理。 
 
 ```js
 logger.trace('trace');
@@ -252,8 +252,6 @@ logger.warn('warn');
 logger.error('error');
 logger.fatal('fatal');
 ```
-
-所以我们需要对这几个级别的方法进行封装处理。 
 
 <br/> 
 
@@ -306,13 +304,13 @@ module.exports = () => {
     }
   }
 
-  // 创建一个专门用于记录『应用异常』的日志，叫作 performance 
+  // 创建一个名为 performance 的日志专门用于记录『应用异常』 
   const performanceLogger = log4js.getLogger("performance")
 
   return async (ctx, next) => {
     log4js.configure(config)
    
-    // 指定需要记录的级别日志，进行二次封装，如果不需要记录的级别，直接为空函数   
+    // 指定需要记录的级别日志，进行二次封装，如果不需要记录级别，直接为空函数   
     methods.forEach((method, i) => {
       if (i >= currentLevel) {
         contextLogger[method] = (message) => {
@@ -361,10 +359,10 @@ module.exports = (app) => {
 
 #### 2. 封装写入的日志信息内容 
 
-上下文 `ctx` 对象中，有我们想要的很多信息，所以完全可以通过它来丰富日志内容。在这里，我们只需要修改传入的参数： 
+在上下文 `ctx` 对象中，有我们想要的很多信息，所以完全可以通过它来丰富日志内容。在这里，我们只需要修改传入的参数： 
 
 ```js
-performanceLogger[method]( message )
+performanceLogger[method](message)
 ``` 
 
 可以看到参数 `message` 是一个字符串，所以我们封装一个函数，用来把信息与上下文 `ctx` 相结合，并返回字符串。 
@@ -419,7 +417,7 @@ module.exports = () => {
   const currentLevel = methods.findIndex(ele => ele === appLogLevel)
   const appenders = {}
 
-  // 增加常量 用来存储公用的日志信息
+  // 增加常量，用来存储公用的日志信息
   const commonInfo = { projectName, serverIp }
 
   appenders.tasks = {
@@ -477,7 +475,7 @@ module.exports = () => {
 
 #### 3. 增加访问日志记录 
 
-之前的代码中，我们已经扩展了『应用日志』，这里我们再扩展下『访问日志』，对访客信息及服务器响应时间进行记录。代码很简单： 
+之前的代码中，我们已经扩展了『应用日志』，这里我们再扩展下『访问日志』，用于对访客信息及服务器响应时间进行记录。代码很简单： 
 
 ```js
 const log4js = require('log4js');
@@ -578,7 +576,7 @@ const baseInfo = {
 }
 
 // 提取变量为参数对象
-module.exports = ( options ) => {
+module.exports = (options) => {
   let contextLogger = {} 
   let config = {}
 
@@ -692,7 +690,7 @@ module.exports = (app) => {
 
 ### 捕捉错误信息 
 
-对于日志中间件里面的错误，我们也需要捕获并处理，这里，我们提取一层进行封装 
+对于日志中间件里面的错误，我们也需要捕获并处理。在这里，我们提取一层进行封装。
 
 #### 1. 新建 `mi-log/index.js` 文件，代码如下： 
 
@@ -717,11 +715,11 @@ module.exports = (options) => {
 
 <br/> 
 
-如果中间件里面有抛出错误，这里将会捕捉到并处理，记录到日志中，然后再次抛出给其他中间件处理。 
+如果中间件里面有抛出错误，这里将会捕捉到并处理，然后记录到日志中，最后再次抛出给其他中间件处理。 
 
 <br/> 
 
-#### 2. 修改 `middleware/index.js` 的调用方法，修改内容如下 
+#### 2. 修改 `middleware/index.js` 的调用方法 
 
 ```js
 // const miLog = require('./mi-log/logger')
@@ -731,7 +729,7 @@ const miLog = require('./mi-log')
 
 <br/> 
 
-到这里我们的日志中间件已经制作完成。当然，还有很多的情况我们需要根据项目情况来继续扩展，比如结合『监控系统』、『日志分析预警』、『自动排查跟踪机制』等。可以参考[官方文档](http://logging.apache.org/log4j/2.x/) 
+到这里我们的日志中间件已经制作完成。当然，还有很多的情况我们需要根据项目情况来继续扩展，比如结合『监控系统』、『日志分析预警』和『自动排查跟踪机制』等。可以参考一下[官方文档](http://logging.apache.org/log4j/2.x/)。
 
 <br/> 
 
