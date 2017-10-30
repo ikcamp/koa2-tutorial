@@ -1,22 +1,32 @@
 module.exports = {
-  index: async function (scope) {
-    Object.assign(scope, {title: "iKcamp"})
-    await this.render("index")
+  index: async(ctx, next) => {
+    await ctx.render("home/index", {title: "iKcamp欢迎您"})
   },
-  login: async function (scope) {
-    Object.assign(scope, {title: "请登录"})
-    await this.render("login")
+  home: async(ctx, next) => {
+    console.log(ctx.request.query)
+    console.log(ctx.request.querystring)
+    ctx.response.body = '<h1>HOME page</h1>'
   },
-  register: async function (scope){
-    let params = this.request.body
+  homeParams: async(ctx, next) => {
+    console.log(ctx.params)
+    ctx.response.body = '<h1>HOME page /:id/:name</h1>'
+  },
+  login: async(ctx, next) => {
+    await ctx.render('home/login', {
+      btnName: 'GoGoGo'
+    })
+  },
+  register: async(ctx, next) => {
+    const { app } = ctx
+    let params = ctx.request.body
     let name = params.name
     let password = params.password
-    let res = await this.service.home.register(name,password)
-    Object.assign(scope, res.data)
+    let res = await app.service.home.register(name,password)
     if(res.status == "-1"){
-      await this.render("login")
+      await ctx.render("home/login", res.data)
     }else{
-      await this.render("success")
+      ctx.state.title = "个人中心"
+      await ctx.render("home/success", res.data)
     }
   }
 }

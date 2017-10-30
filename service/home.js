@@ -1,5 +1,5 @@
 module.exports = {
-  async register(name, pwd) {
+  register: async function(name, pwd) {
     let data 
     if(name == 'ikcamp' && pwd == '123456'){
       data = {

@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>404 Not Found</title>
+  <title>404</title>
 </head>
 <body>
-    <h1>404 Not Found</h1>
-    <p>请检查请求地址是否正确</p>
+  <div id="error">
+    <h1>Error - {{ status }}</h1>
+    <p>错误码 404 的描述信息</p>
+    {% if (env === 'development') %}
+    <h2>Message:</h2>
+    <pre>
+      <code>
+        {{ error }}
+      </code>
+    </pre>
+    <h2>Stack:</h2>
+    <pre>
+      <code>
+        {{ stack }}
+      </code>
+    </pre> 
+    {% endif %}
+  </div>
 </body>
 </html>

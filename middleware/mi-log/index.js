@@ -1,4 +1,3 @@
-const convert = require("koa-convert");
 const logger = require("./logger");
 
 /**
@@ -9,10 +8,9 @@ const logger = require("./logger");
  */
 module.exports = (options) => {
 
-  const loggerMiddleware = convert(logger(options));
+  const loggerMiddleware = logger(options)
 
   return (ctx, next) => {
-
     return loggerMiddleware(ctx, next)
     .catch((e) => {
         if (ctx.status < 500) {

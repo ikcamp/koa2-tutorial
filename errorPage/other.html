@@ -1,13 +1,26 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <title>未知异常</title>
 </head>
 <body>
-    未知错误
+  <div id="error">
+    <h1>Error - {{ status }}</h1>
+    <p>未知异常</p>
+    {% if (env === 'development') %}
+    <h2>Message:</h2>
+    <pre>
+      <code>
+        {{ error }}
+      </code>
+    </pre>
+    <h2>Stack:</h2>
+    <pre>
+      <code>
+        {{ stack }}
+      </code>
+    </pre> 
+    {% endif %}
+  </div>
 </body>
 </html>

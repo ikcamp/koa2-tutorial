@@ -1,7 +1,7 @@
 {% extends "./layout.html" %} 
 
 {% block head %}
-<link rel="stylesheet" href="{{__sourceMap('/home/main.css')}}">
+<link rel="stylesheet" href="/home/main.css">
 {% endblock %}
 
 {% block body %}
@@ -31,8 +31,4 @@
         </ul>
     </div>
 </div>
-{% endblock %}
-
-{% block content %}
-<script src="{{__sourceMap('/home/home.js')}}"></script>
 {% endblock %}

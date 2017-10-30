@@ -1,6 +1,6 @@
 const log4js = require('log4js');
 const path = require("path");
-const client = require("./client.js");
+const client = require("./access.js");
 
 // ALL OFF 这两个等级并不会直接在业务代码中使用
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"];
@@ -10,7 +10,6 @@ const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"];
 const baseInfo = {
   appLogLevel: 'debug',
   dir: 'logs',
-  category: 'default',
   env: 'local',
   projectName: 'default',
   serverIp: '0.0.0.0'
@@ -35,8 +34,7 @@ module.exports = (options) => {
     serverIp,
     appLogLevel,
     dir,
-    env,
-    category
+    env
   } = opts;
   const currentLevel = methods.findIndex(ele => ele === appLogLevel)
   const appenders = {};
@@ -64,23 +62,33 @@ module.exports = (options) => {
       }
     }
   }
-  const logger = log4js.getLogger(category);
-
+  // 访问日志
+  const accessLogger = log4js.getLogger("access");
+  // 应用日志
+  const performanceLogger = log4js.getLogger("performance");
+  
   // 将log挂在上下文上
   return async (ctx, next) => {
+    const start = Date.now();
 
     log4js.configure(config);
     // level 以上级别的日志方法
     methods.forEach((method, i) => {
       if (i >= currentLevel) {
         contextLogger[method] = (message) => {
-          logger[method](client(ctx, message, commonInfo))
+          performanceLogger[method](client(ctx, message, commonInfo))
         }
       } else {
         contextLogger[method] = () => {}
       }
     });
     ctx.log = contextLogger;
-    await next()
-  };
+
+    await next();
+    // 记录URL以及页面执行时间
+    const delta = Date.now() - start;
+    accessLogger.info(client(ctx, {
+      responseTime: delta
+    }, commonInfo))
+  }
 }

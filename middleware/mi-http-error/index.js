@@ -1,80 +1,50 @@
-const fs = require('fs');
-const Path = require('path');
-const consolidate = require('consolidate');
+const Path = require('path') 
+const nunjucks = require('nunjucks')
+module.exports = (opts = {}) => {
+  // 增加环境变量，用来传入到视图中，方便调试
+  const env = opts.env || process.env.NODE_ENV || 'development'  
 
-/**
- * fs直接读取文件(暂不使用)
- * 
- * @param {any} path 
- * @returns 
- */
-const getTemplate = (path) => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, {
-            encoding: 'utf-8'
-        }, (err, data) => {
-            if (err) reject(err)
-            resolve(data);
-        });
-    });
-}
-
-/**
- * 模块化导出
- * 
- * @param {any} opts 
- * @returns 
- */
-module.exports = (opts) => {
-    opts = opts || {};
-    const env = opts.env || process.env.NODE_ENV || 'development';
-    const engine = opts.engine || 'lodash';
-    const folder = opts.errorPageFolder; // 使用自定义文件夹
-    const templatePath = Path.resolve(__dirname, './error.html'); // 默认模板
-    let fileName = 'other';
-    /**
-     * 返回一个async函数
-     * 
-     * @param {any} ctx 
-     * @param {any} next 
-     */
-    return async (ctx, next) => {
-        try {
-            await next();
-        } catch (e) {
-            let status = parseInt(e.status);
-            const message = e.message;
-            console.log('默认status', e);
-            if (status >= 400) {
-                switch (status) {
-                    case 400:
-                    case 404:
-                    case 500:
-                        fileName = status;
-                        break;
-                    default:
-                        fileName = 'other';
-                }
-            } else {
-                status = 500;
-                fileName = status;
-            }
-            // 确定最终的filePath
-            const filePath = folder ? Path.join(folder, `${fileName}.html`) : templatePath;
-            try {
-                const data = await consolidate[engine](filePath, {
-                    env: env,
-                    status: e.status || e.message,
-                    error: e.message,
-                    stack: e.stack
-                });
-                ctx.status = status;
-                ctx.body = data;
-            } catch (e) {
-                console.log('错误页读取失败');
-                ctx.status = status;
-                ctx.body = message;
-            }
+  const folder = opts.errorPageFolder
+  const templatePath = Path.resolve(__dirname, './error.html')
+  let fileName = 'other'
+  return async (ctx, next) => {
+    try {
+       await next()
+       if (ctx.response.status === 404 && !ctx.response.body) ctx.throw(404);
+    } catch (e) {
+      let status = parseInt(e.status)
+      const message = e.message
+      if(status >= 400){
+        switch(status){
+          case 400:
+          case 404:
+          case 500:
+            fileName = status;
+            break;
+          default:
+            fileName = 'other'
         }
+      }else{
+        status = 500
+        fileName = status
+      }
+      const filePath = folder ? Path.join(folder, `${fileName}.html`) : templatePath
+      // 渲染对应错误类型的视图，并传入参数对象
+      try{
+        nunjucks.configure( folder ? folder : __dirname )
+        const data = await nunjucks.render(filePath, {
+          env: env, // 指定当前环境参数
+          status: e.status || e.message, // 如果错误信息中没有 status，就显示为 message
+          error: e.message, // 错误信息
+          stack: e.stack // 错误的堆栈信息
+        })
+        // 赋值给响应体
+        ctx.status = status
+        ctx.body = data
+      }catch(e){
+        // 如果中间件存在错误异常，直接抛出信息，由其他中间件处理
+        ctx.throw(500, `错误页渲染失败:${e.message}`)
+      }
     }
+  }
 }

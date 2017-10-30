@@ -1,10 +1,10 @@
 const Koa = require('koa')
-const middleware = require('./middleware')
-const config = require('./config')
-const isProd = process.env.NODE_ENV === 'production'
-const port = isProd?config.prod.port:config.dev.port
 const app = new Koa()
+const router = require('./router')
+const middleware = require('./middleware')
 
 middleware(app)
-app.listen(port)
-console.log(`app started at port ${port}...`);
+router(app)
+app.listen(3000, () => {
+  console.log('server is running at http://localhost:3000')
+})

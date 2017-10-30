@@ -1,5 +1,0 @@
-{
-  "verbose": true,
-  "ignore": ["assets/*", "build/*", "node_modules/", ".git/", ".vscode/", "cache/", "log/"],
-  "ext":"js html"
-}
