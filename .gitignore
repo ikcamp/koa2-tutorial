@@ -1,5 +1,3 @@
-koa2-tutorial/node_modules/
-koa2-tutorial/logs/
-node_modules/
-logs/
+code/node_modules/
+code/logs/
 **/*.lock
