@@ -46,6 +46,18 @@
 
 <br/>
 
+## 🇨🇳  目录说明  
+
+```txt
+├─ code/            // 本节课程结束后的完整代码
+│  ├─ package.json 
+│  └─ app.js 
+├─ images/          // 文案教程中用到的图片素材
+└─ README.md        // 撰写文案教程的文件
+```
+
+<br/>
+
 ## 🇨🇳  学习方式
 教程以 `git` 分支的方式管理
 
@@ -69,18 +81,6 @@ git checkout 0-start
 **注意：** 所有的分支命名上，都是数字开头，也就是我们的开发顺序和讲解顺序。  
 
 <br>
-
-## 🇨🇳  目录说明  
-
-```txt
-├─ code/            // 本节课程结束后的完整代码
-│  ├─ package.json 
-│  └─ app.js 
-├─ images/          // 文案教程中用到的图片素材
-└─ README.md        // 撰写文案教程的文件
-```
-
-<br/>
 
 ## 🇨🇳  完整代码  
 > 教程的完整代码在主干 `master` 中，请自行[查阅📖 ](https://github.com/ikcamp/koa2-tutorial/tree/master)
