@@ -21,7 +21,7 @@ module.exports = ( options ) => {
   const appenders = {}
   const commonInfo = { projectName, serverIp }
 
-  appenders.tasks = {
+  appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
     pattern: '-yyyy-MM-dd.log',
