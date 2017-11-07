@@ -182,7 +182,7 @@ module.exports = ( options ) => {
 
 创建 `/mi-log/index.js` 文件，并增加如下代码： 
 
-```
+```js
 const logger = require("./logger")
 module.exports = () => {
    return logger()
@@ -232,7 +232,7 @@ module.exports = (app) => {
 
 若要在其他中间件或代码中通过 `ctx` 上的方法打印日志，首先需要在上下文中挂载 `log` 函数。打开 `/mi-log/logger.js` 文件：
 
-```
+```js
 const log4js = require('log4js');
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
@@ -270,7 +270,7 @@ module.exports = () => {
 
 打开 `/mi-send/index.js` 文件， 并调用 `ctx` 上的 `log` 方法：
 
-```
+```js
 module.exports = () => {
   function render(json) {
       this.set("Content-Type", "application/json")
@@ -289,7 +289,7 @@ module.exports = () => {
 
 <br/>
 
-```
+```js
 const log4js = require('log4js');
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
@@ -349,7 +349,7 @@ module.exports = () => {
 
 #### 抽出可配置量
 
-```
+```js
 const log4js = require('log4js');
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
@@ -366,7 +366,8 @@ const { env, appLogLevel, dir } = baseInfo
 module.exports = () => {
   const contextLogger = {}
   const appenders = {}
-
+  let config = {}
+  
   appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
