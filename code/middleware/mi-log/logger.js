@@ -15,9 +15,8 @@ module.exports = (options) => {
   const appenders = {}
   
   const opts = Object.assign({}, baseInfo, options || {})
-  const { env, appLogLevel, dir, serverIp, projectName } = opts;
-
-	const commonInfo = { projectName, serverIp }
+  const { env, appLogLevel, dir, serverIp, projectName } = opts
+  const commonInfo = { projectName, serverIp }
 	
   appenders.cheese = {
     type: 'dateFile',
