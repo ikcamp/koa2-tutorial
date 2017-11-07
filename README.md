@@ -49,13 +49,10 @@
 
 <br/> 
 
-## 如何实现 
+## 代码实现 
 
-<br/> 
 
-### 初始化日志 demo 
-
-#### 1. 安装 `log4js` 模块 
+#### 安装 `log4js` 模块 
 
 ```js
 npm i log4js -S
@@ -63,9 +60,43 @@ npm i log4js -S
 
 <br/>
 
-#### 2. `log4js` 官方示例
+#### `log4js` 官方简单示例
+
 
 在 `middleware/` 目录下创建 `mi-log/demo.js`，并贴入官方示例代码： 
+
+```js
+var log4js = require('log4js');
+var logger = log4js.getLogger();
+logger.level = 'debug';
+logger.debug("Some debug messages");
+
+```
+
+<br/>
+
+然后在 `/middleware/mi-log/` 目录下运行：
+
+```js
+cd ./middleware/mi-log/ && node demo.js
+```
+
+<br/>
+
+可以在终端看到如下输出：
+
+```txt
+[2017-10-24 15:45:30.770] [DEBUG] default - Some debug messages
+```
+
+一段带有日期、时间、日志级别和调用 `debug` 方法时传入的字符串的文本日志。实现了简单的终端日志输出。
+
+<br/>
+
+#### `log4js` 官方复杂示例
+
+
+替换 `mi-log/demo.js` 中的代码为如下：
 
 ```js
 const log4js = require('log4js');
@@ -85,15 +116,15 @@ logger.fatal('Cheese was breeding ground for listeria.');
 
 <br/>
 
-然后在 `/middleware/mi-log/` 目录下运行：
+再次在 `/middleware/mi-log/` 目录下运行：
 
 ```js
-cd ./middleware/mi-log/ && node demo.js
+node demo.js
 ```
 
 <br/> 
 
-运行之后，在当前的目录下会产生一个日志文件 `cheese.log`，里面记录了 `error` 以上级别的信息，也就是如下内容： 
+运行之后，在当前的目录下会生成一个日志文件 `cheese.log`文件，文件中有两条日志并记录了 `error` 及以上级别的信息，也就是如下内容： 
 
 ```txt
 [2017-10-24 15:51:30.770] [ERROR] cheese - Cheese is too ripe!
@@ -109,9 +140,9 @@ cd ./middleware/mi-log/ && node demo.js
 ```js
 {
   /**
-   * 指定要记录的日志叫作 cheese
+   * 指定要记录的日志分类 cheese
    * 展示方式为文件类型 file
-   * 展示的文件名 cheese.log
+   * 日志输出的文件名 cheese.log
    */
   appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
 
@@ -122,79 +153,45 @@ cd ./middleware/mi-log/ && node demo.js
    */
   categories: { default: { appenders: ['cheese'], level: 'error' } }
 }
-``` 
+```
 
-<br/> 
 
-在上述代码的基础上，我们只需要提取出公用的配置项，并封装一些函数方法，比如在上下文中挂载 `log` 函数，基本上就能实现项目中的日志功能。 
+#### 改写为log中间件
 
-<br/> 
-
-### 日志中间件雏形 
-
-#### 1. 提取部分变量 
-
-创建 `/mi-log/logger.js` 文件，并增加如下代码： 
+创建 `/mi-log/logger.js` 文件，并增加如下代码：
 
 ```js
 const log4js = require('log4js');
-const path = require("path");
-
-module.exports = () => {
-  let config = {}
-  const appLogLevel = 'debug' // 指定记录的日志级别
-  const dir = 'logs'  // 指定日志存放的目录名
-  const env = 'dev'   // 指定当前环境，当为开发环境时，在控制台也输出，方便调试
-  const projectName = 'koa2-tutorial' // 项目名，记录在日志中的项目信息
-  const serverIp = '0.0.0.0' // 默认情况下服务器 ip 地址
-  
-  const appenders = {}
-
-  appenders.tasks = { // 指定输出的日志文件名字为 task 
-    type: 'dateFile', // 日志类型 
-    filename: `${dir}/task`, // 输出的文件名
-    pattern: '-yyyy-MM-dd.log', // 文件名增加后缀
-    alwaysIncludePattern: true  // 是否总是有后缀名
-  }
-
-  // 开发环境添加终端打印日志
-  if (env === "dev" || env === "local" || env === "development") {
-    appenders.out = {
-      type: "console"
-    }
-  }
-
-  config = {
-    appenders,
-    categories: {
-      default: {
-        appenders: Object.keys(appenders), // 默认为 tasks
-        level: appLogLevel // 指定记录的日志级别，当前为 'debug' 及以上
-      }
-    }
-  }
-
-  return async (ctx, next) => {
-    log4js.configure(config)
-    const logger = log4js.getLogger()
+module.exports = ( options ) => {
+  return async (ctx, next) => {
+    const start = Date.now()
+    log4js.configure({
+      appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
+      categories: { default: { appenders: ['cheese'], level: 'info' } }
+    }); 
+    const logger = log4js.getLogger('cheese');
     await next()
-    logger.trace('trace');
-    logger.debug('debug');
-    logger.info('info');
-    logger.warn('warn');
-    logger.error('error');
-    logger.fatal('fatal');
-  }
+    const end = Date.now()
+    const responseTime = end - start;
+    logger.info(`响应时间为${responseTime/1000}s`);
+  }
 }
 ``` 
 
-代码中，我们指定了几个常量以方便后面提取，比如 `appLogLevel`、`dir`、`env` 等。 
+<br/> 
+
+创建 `/mi-log/index.js` 文件，并增加如下代码： 
+
+```
+const logger = require("./logger")
+module.exports = () => {
+   return logger()
+}
+```
 
 <br/> 
 
-#### 2. 引用中间件 
-
-修改 `middleware/index.js`，在代码中引入中间件： 
+修改  `middleware/index.js` 文件，并增加对 `log` 中间件的注册， 如下代码： 
 
 ```js
 const path = require('path')
@@ -204,9 +201,9 @@ const staticFiles = require('koa-static')
 
 const miSend = require('./mi-send')
 // 引入日志中间件
-const miLog = require('./mi-log/logger')
+const miLog = require('./mi-log')
 module.exports = (app) => {
-  // 调用中间件
+  // 注册中间件
   app.use(miLog())
 
   app.use(staticFiles(path.resolve(__dirname, "../public")))
@@ -222,78 +219,166 @@ module.exports = (app) => {
 }
 ``` 
 
+<br/> 
+
+打开浏览器并访问 `http://localhost:3000`， 来发送一个`http` 请求。
+
+如上，按照前几节课程中讲解的中间件的写法，将以上代码改写为中间件。 基于 `koa` 的洋葱模型，当 `http` 请求经过此中间件时便会在 `cheese.log` 文件中打印一条日志级别为 `info` 的日志并记录了请求的响应时间。如此，便实现了访问日志的记录。
+
+<br/> 
+
+#### 实现应用日志，将其挂载到 `ctx` 上
+
+
+若要在其他中间件或代码中通过 `ctx` 上的方法打印日志，首先需要在上下文中挂载 `log` 函数。打开 `/mi-log/logger.js` 文件：
+
+```
+const log4js = require('log4js');
+const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
+
+module.exports = () => {
+  const contextLogger = {}
+  log4js.configure({
+    appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
+    categories: { default: { appenders: ['cheese'], level: 'info' } }
+  }); 
+ 
+  const logger = log4js.getLogger('cheese');
+  
+  return async (ctx, next) => {
+  	 // 记录请求开始的时间
+    const start = Date.now()
+	 // 循环methods将所有方法挂载到ctx 上
+    methods.forEach((method, i) => {
+	   contextLogger[method] = (message) => {
+	     logger[method](message)
+	   }
+    })
+    ctx.log = contextLogger;
+
+    await next()
+    // 记录完成的时间 作差 计算响应时间
+    const responseTime = Date.now() - start;
+    logger.info(`响应时间为${responseTime/1000}s`);
+  }
+}
+
+```
+创建 `contextLogger` 对象，将所有的日志级别方法赋给对应的 `contextLogger` 对象方法。在将循环后的包含所有方法的 `contextLogger` 对象赋给 `ctx` 上的 `log` 方法。
+
+<br/> 
+
+打开 `/mi-send/index.js` 文件， 并调用 `ctx` 上的 `log` 方法：
+
+```
+module.exports = () => {
+  function render(json) {
+      this.set("Content-Type", "application/json")
+      this.body = JSON.stringify(json)
+  }
+  return async (ctx, next) => {
+      ctx.send = render.bind(ctx)
+      // 调用ctx上的log方法下的error方法打印日志
+      ctx.log.error('ikcamp');
+      await next()
+  }
+}
+```
+
+在其他中间件中通过调用 `ctx` 上的 `log` 方法，从而实现打印应用日志。
+
 <br/>
 
-这时候打开浏览器并访问 `http://localhost:3000`，中间件执行便会在相对应的日期文件中记录下访问日志。
+```
+const log4js = require('log4js');
+const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
+
+module.exports = () => {
+  const contextLogger = {}
+  const config = {
+    appenders: {
+    	cheese: {
+	     type: 'dateFile', // 日志类型 
+	     filename: `logs/task`,  // 输出的文件名
+	     pattern: '-yyyy-MM-dd.log',  // 文件名增加后缀
+	     alwaysIncludePattern: true   // 是否总是有后缀名
+	   }
+    },
+    categories: {
+      default: {
+        appenders: ['cheese'],
+        level:'info'
+      }
+    }
+  }
+
+  const logger = log4js.getLogger('cheese');
+
+  return async (ctx, next) => {
+    const start = Date.now()
+
+    log4js.configure(config)
+    methods.forEach((method, i) => {
+      contextLogger[method] = (message) => {
+        logger[method](message)
+      }
+    })
+    ctx.log = contextLogger;
+
+    await next()
+    const responseTime = Date.now() - start;
+    logger.info(`响应时间为${responseTime/1000}s`);
+  }
+}
+
+```
+
+<br/>
+
+修改日志类型为日期文件，按照日期切割日志输出，以减小单个日志文件的大小。这时候打开浏览器并访问 `http://localhost:3000`，这时会自动生成一个 `logs` 目录，并生成一个 `cheese-2017-10-24.log` 文件， 中间件执行便会在其中中记录下访问日志。
 
 ```txt
 ├── node_modules/
 ├── logs/ 
-│     ├── task-2017-10-24.log 
+│     ├── cheese-2017-10-24.log 
 ├── ……
 ├── app.js
 ```
 
-<br/> 
+<br/>
 
-此时的访问日志都是简单的固定字符串，尚达不到我们的目标。我们需要增加一些细节上的东西，比如：『请求方式』、『客户端信息』和『请求源』等来丰富我们的日志。
+#### 抽出可配置量
 
-<br/> 
-
-### 丰富日志信息 
-
-从代码上不难看出，我们想要丰富的信息，都是在日志不同级别的调用上写入文件的。所以我们需要对这几个级别的方法进行封装处理。 
-
-```js
-logger.trace('trace');
-logger.debug('debug');
-logger.info('info');
-logger.warn('warn');
-logger.error('error');
-logger.fatal('fatal');
 ```
-
-<br/> 
-
-#### 1. 对不同级别的日志输出函数进行封装 
-
-修改 `mi-log/logger.js` 文件，代码如下所示： 
-
-```js
 const log4js = require('log4js');
-const path = require("path");
-
-// 将日志的不同级别提取为数组，方便后面做处理
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
+// 提取默认公用参数对象
+const baseInfo = {
+  appLogLevel: 'debug',  // 指定记录的日志级别
+  dir: 'logs',		// 指定日志存放的目录名
+  env: 'dev',   // 指定当前环境，当为开发环境时，在控制台也输出，方便调试
+  projectName: 'koa2-tutorial',  // 项目名，记录在日志中的项目信息
+  serverIp: '0.0.0.0'		// 默认情况下服务器 ip 地址
+}
+
+const { env, appLogLevel, dir } = baseInfo
 module.exports = () => {
-  // 增加 contextLogger 对象，用来临时存储不同级别的日志输出函数
-  let contextLogger = {} 
-
-  let config = {}
-  const appLogLevel = 'debug'
-  const dir = 'logs'
-  const env = 'dev'
-  const projectName = 'koa2-tutorial'
-  const serverIp = '0.0.0.0'
-  
-  // 创建常量 用来存储需要记录的日志级别在数组 methods 中的下标
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
-
+  const contextLogger = {}
   const appenders = {}
-  appenders.tasks = {
+
+  appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
     pattern: '-yyyy-MM-dd.log',
     alwaysIncludePattern: true
   }
-
+  // 环境变量为dev local development 认为是开发环境
   if (env === "dev" || env === "local" || env === "development") {
     appenders.out = {
       type: "console"
     }
   }
-
   config = {
     appenders,
     categories: {
@@ -304,68 +389,42 @@ module.exports = () => {
     }
   }
 
-  // 创建一个名为 performance 的日志专门用于记录『应用异常』 
-  const performanceLogger = log4js.getLogger("performance")
+  const logger = log4js.getLogger('cheese');
 
   return async (ctx, next) => {
+    const start = Date.now()
+
     log4js.configure(config)
-   
-    // 指定需要记录的级别日志，进行二次封装，如果不需要记录级别，直接为空函数   
     methods.forEach((method, i) => {
-      if (i >= currentLevel) {
-        contextLogger[method] = (message) => {
-          performanceLogger[method]( message )
-        }
-      } else {
-        contextLogger[method] = () => {}
+      contextLogger[method] = (message) => {
+        logger[method](message)
       }
     })
-    // 将各日志输出函数以对象的形式挂载到 ctx.log 上
     ctx.log = contextLogger;
 
-    const logger = log4js.getLogger()
     await next()
-    logger.trace('trace');
-    logger.debug('debug');
-    logger.info('info');
-    logger.warn('warn');
-    logger.error('error');
-    logger.fatal('fatal');
+    const responseTime = Date.now() - start;
+    logger.info(`响应时间为${responseTime/1000}s`);
   }
 }
+
 ```
 
-<br/> 
+代码中，我们指定了几个常量以方便后面提取，比如 `appLogLevel`、`dir`、`env` 等。 。并判断当前环境为开发环境则将日志同时输出到终端， 以便开发人员在开发是查看运行状态和查询异常。
 
-封装之后，我们修改 `middleware/index.js`，在文件的尾部增加中间件，来测试下：
+<br/>
 
-```js
-module.exports = (app) => {
-  // 以上内容已省略
 
-  // 增加的『测试代码』如下
-  app.use(async (ctx, next)=>{
-    await next()
-    ctx.log.error('500 error Test')
-  })
-}
-``` 
+#### 丰富日志信息 
 
-<br/> 
 
-重启服务器后，再次访问 `http://localhost:3000`，就会发现 `logs/task-2017-10-24.log` 文件里面已经存在了我们想要的信息。
-
-<br/> 
-
-#### 2. 封装写入的日志信息内容 
-
-在上下文 `ctx` 对象中，有我们想要的很多信息，所以完全可以通过它来丰富日志内容。在这里，我们只需要修改传入的参数： 
+在 `ctx` 对象中，有一些客户端信息是我们数据统计及排查问题所需要的，所以完全可以利用这些信息来丰富日志内容。在这里，我们只需要修改挂载 `ctx` 对象的 `log` 函数的传入参数： 
 
 ```js
-performanceLogger[method](message)
+logger[method](message)
 ``` 
 
-可以看到参数 `message` 是一个字符串，所以我们封装一个函数，用来把信息与上下文 `ctx` 相结合，并返回字符串。 
+参数 `message` 是一个字符串，所以我们封装一个函数，用来把信息与上下文 `ctx` 中的客户端信息相结合，并返回字符串。 
 
 <br/> 
 
@@ -374,18 +433,18 @@ performanceLogger[method](message)
 ```js
 module.exports = (ctx, message, commonInfo) => {
   const {
-    method,
-    url,
-    host,
-    headers
+    method,  // 请求方法 get post或其他
+    url,		  // 请求链接
+    host,	  // 发送请求的客户端的host
+    headers	  // 请求中的headers
   } = ctx.request;
   const client = {
     method,
     url,
     host,
     message,
-    referer: headers['referer'],
-    userAgent: headers['user-agent']
+    referer: headers['referer'],  // 请求的源地址
+    userAgent: headers['user-agent']  // 客户端信息 设备及浏览器信息
   }
   return JSON.stringify(Object.assign(commonInfo, client));
 }
@@ -393,180 +452,18 @@ module.exports = (ctx, message, commonInfo) => {
 
 **注意：** 最终返回的是字符串。 
 
+取出 `ctx` 对象中请求相关信息及客户端 `userAgent` 等信息并转为字符串。
+
 <br/> 
 
 在 `mi-log/logger.js` 文件中调用： 
 
 ```js
 const log4js = require('log4js');
-const path = require("path");
-
 // 引入日志输出信息的封装文件
 const access = require("./access.js");
-
-const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"];
-module.exports = () => {
-  let contextLogger = {} 
-  let config = {}
-  const appLogLevel = 'debug'
-  const dir = 'logs'
-  const env = 'dev'
-  const projectName = 'koa2-tutorial'
-  const serverIp = '0.0.0.0'
-  
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
-  const appenders = {}
-
-  // 增加常量，用来存储公用的日志信息
-  const commonInfo = { projectName, serverIp }
-
-  appenders.tasks = {
-    type: 'dateFile',
-    filename: `${dir}/task`,
-    pattern: '-yyyy-MM-dd.log',
-    alwaysIncludePattern: true
-  }
-  if (env === "dev" || env === "local" || env === "development") {
-    appenders.out = {
-      type: "console"
-    }
-  }
-  config = {
-    appenders,
-    categories: {
-      default: {
-        appenders: Object.keys(appenders),
-        level: appLogLevel
-      }
-    }
-  }
-  const performanceLogger = log4js.getLogger("performance")
-  return async (ctx, next) => {
-    log4js.configure(config)
-    methods.forEach((method, i) => {
-      if (i >= currentLevel) {
-        contextLogger[method] = (message) => {
-          // 将入参换为函数返回的字符串
-          performanceLogger[method](access(ctx, message, commonInfo))
-        }
-      } else {
-        contextLogger[method] = () => {}
-      }
-    })
-    ctx.log = contextLogger;
-
-    const logger = log4js.getLogger()
-    await next()
-    logger.trace('trace');
-    logger.debug('debug');
-    logger.info('info');
-    logger.warn('warn');
-    logger.error('error');
-    logger.fatal('fatal');
-  }
-}
-```
-
-<br/> 
-
-重启服务器并访问 `http://localhost:3000` 就会发现，日志文件的记录内容已经变化。 
-
-<br/> 
-
-#### 3. 增加访问日志记录 
-
-之前的代码中，我们已经扩展了『应用日志』，这里我们再扩展下『访问日志』，用于对访客信息及服务器响应时间进行记录。代码很简单： 
-
-```js
-const log4js = require('log4js');
-const path = require("path");
-const access = require("./access.js");
-
-const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
-module.exports = () => {
-  let contextLogger = {} 
-  let config = {}
-  const appLogLevel = 'debug'
-  const dir = 'logs'
-  const env = 'dev'
-  const projectName = 'koa2-tutorial'
-  const serverIp = '0.0.0.0'
-  
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
-  const appenders = {}
-  const commonInfo = { projectName, serverIp }
-
-  appenders.tasks = {
-    type: 'dateFile',
-    filename: `${dir}/task`,
-    pattern: '-yyyy-MM-dd.log',
-    alwaysIncludePattern: true
-  }
-  if (env === "dev" || env === "local" || env === "development") {
-    appenders.out = {
-      type: "console"
-    }
-  }
-  config = {
-    appenders,
-    categories: {
-      default: {
-        appenders: Object.keys(appenders),
-        level: appLogLevel
-      }
-    }
-  }
-
-  // 增加访问日志
-  const accessLogger = log4js.getLogger("access");
-  
-  const performanceLogger = log4js.getLogger("performance")
-
-  return async (ctx, next) => {
-    // 记录开始时间
-    const start = Date.now()
-
-    log4js.configure(config)
-    methods.forEach((method, i) => {
-      if (i >= currentLevel) {
-        contextLogger[method] = (message) => {
-          performanceLogger[method](access(ctx, message, commonInfo))
-        }
-      } else {
-        contextLogger[method] = () => {}
-      }
-    })
-    ctx.log = contextLogger;
-
-    const logger = log4js.getLogger()
-    await next()
-
-    // 记录响应时间，并输出到日志文件中
-    const delta = Date.now() - start;
-    accessLogger.info(client(ctx, {
-      responseTime: delta
-    }, commonInfo))
-  }
-}
-``` 
-
-<br/> 
-
-代码到这里，已经完成了大部分的日志功能。下面我们完善下其他功能：提取公用参数和捕捉错误。 
-
-<br/> 
-
-### 提取公用参数 
-
-#### 1. 修改 `mi-log/logger.js` 文件，提取参数变量
-
-```js
-const log4js = require('log4js');
-const path = require("path");
-const access = require("./access.js");
 const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
-// 提取默认公用参数对象
 const baseInfo = {
   appLogLevel: 'debug',
   dir: 'logs',
@@ -574,26 +471,20 @@ const baseInfo = {
   projectName: 'koa2-tutorial',
   serverIp: '0.0.0.0'
 }
-
-// 提取变量为参数对象
-module.exports = (options) => {
-  let contextLogger = {} 
-  let config = {}
-
-  // 继承自 baseInfo 默认参数
-  const opts = Object.assign({}, baseInfo, options || {}) ;
-  const {projectName,serverIp,appLogLevel,dir,env} = opts;
-  
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
+const { env, appLogLevel, dir, serverIp, projectName } = baseInfo
+// 增加常量，用来存储公用的日志信息
+const commonInfo = { projectName, serverIp }
+module.exports = () => {
+  const contextLogger = {}
   const appenders = {}
-  const commonInfo = { projectName, serverIp }
 
-  appenders.tasks = {
+  appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
     pattern: '-yyyy-MM-dd.log',
     alwaysIncludePattern: true
   }
+  
   if (env === "dev" || env === "local" || env === "development") {
     appenders.out = {
       type: "console"
@@ -609,38 +500,36 @@ module.exports = (options) => {
     }
   }
 
-  const accessLogger = log4js.getLogger("access");
-  
-  const performanceLogger = log4js.getLogger("performance")
+  const logger = log4js.getLogger('cheese');
 
   return async (ctx, next) => {
     const start = Date.now()
 
     log4js.configure(config)
     methods.forEach((method, i) => {
-      if (i >= currentLevel) {
-        contextLogger[method] = (message) => {
-          performanceLogger[method](access(ctx, message, commonInfo))
-        }
-      } else {
-        contextLogger[method] = () => {}
+      contextLogger[method] = (message) => {
+       // 将入参换为函数返回的字符串
+        logger[method](access(ctx, message, commonInfo))
       }
     })
     ctx.log = contextLogger;
 
-    const logger = log4js.getLogger()
     await next()
-    const delta = Date.now() - start;
-    accessLogger.info(access(ctx, {
-      responseTime: delta
+    const responseTime = Date.now() - start;
+    logger.info(access(ctx, {
+      responseTime: `响应时间为${responseTime/1000}s`
     }, commonInfo))
   }
 }
-``` 
+```
 
 <br/> 
 
-#### 2. 修改中间件的调用 
+重启服务器并访问 `http://localhost:3000` 就会发现，日志文件的记录内容已经变化。代码到这里，已经完成了大部分的日志功能。下面我们完善下其他功能：自定义配置参数和捕捉错误。
+
+<br/> 
+
+#### 项目自定义内容
 
 安装依赖文件 `ip`: 
 
@@ -662,9 +551,9 @@ const staticFiles = require('koa-static')
 const miSend = require('./mi-send')
 const miLog = require('./mi-log/logger')
 module.exports = (app) => {
-
+  // 将配置中间件的参数在注册中间件时作为参数传入
   app.use(miLog({
-    env: app.env, // koa 提供的环境变量
+    env: app.env,  // koa 提供的环境变量
     projectName: 'koa2-tutorial',
     appLogLevel: 'debug',
     dir: 'logs',
@@ -688,11 +577,85 @@ module.exports = (app) => {
 
 <br/> 
 
-### 捕捉错误信息 
+再次修改 `mi-log/logger.js` 文件：
+
+```js
+const log4js = require('log4js');
+const access = require("./access.js");
+const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
+
+const baseInfo = {
+  appLogLevel: 'debug',
+  dir: 'logs',
+  env: 'dev',
+  projectName: 'koa2-tutorial',
+  serverIp: '0.0.0.0'
+}
+
+module.exports = (options) => {
+  const contextLogger = {}
+  const appenders = {}
+  
+  // 继承自 baseInfo 默认参数
+  const opts = Object.assign({}, baseInfo, options || {})
+  // 需要的变量解构 方便使用
+  const { env, appLogLevel, dir, serverIp, projectName } = opts;
+
+	const commonInfo = { projectName, serverIp }
+	
+  appenders.cheese = {
+    type: 'dateFile',
+    filename: `${dir}/task`,
+    pattern: '-yyyy-MM-dd.log',
+    alwaysIncludePattern: true
+  }
+  
+  if (env === "dev" || env === "local" || env === "development") {
+    appenders.out = {
+      type: "console"
+    }
+  }
+  config = {
+    appenders,
+    categories: {
+      default: {
+        appenders: Object.keys(appenders),
+        level: appLogLevel
+      }
+    }
+  }
+
+  const logger = log4js.getLogger('cheese');
+
+  return async (ctx, next) => {
+    const start = Date.now()
+
+    log4js.configure(config)
+    methods.forEach((method, i) => {
+      contextLogger[method] = (message) => {
+        logger[method](access(ctx, message, commonInfo))
+      }
+    })
+    ctx.log = contextLogger;
+
+    await next()
+    const responseTime = Date.now() - start;
+    logger.info(access(ctx, {
+      responseTime: `响应时间为${responseTime/1000}s`
+    }, commonInfo))
+  }
+}
+```
+
+将项目中自定义的量覆盖默认值，解构使用。以达到项目自定义的目的。
+
+<br/> 
+
+#### 对日志中间件进行错误处理
 
 对于日志中间件里面的错误，我们也需要捕获并处理。在这里，我们提取一层进行封装。
 
-#### 1. 新建 `mi-log/index.js` 文件，代码如下： 
+打开 `mi-log/index.js` 文件，修改代码如下： 
 
 ```js
 const logger = require("./logger")
@@ -715,42 +678,13 @@ module.exports = (options) => {
 
 <br/> 
 
-如果中间件里面有抛出错误，这里将会捕捉到并处理，然后记录到日志中，最后再次抛出给其他中间件处理。 
+如果中间件里面有抛出错误，这里将通过 `catch` 函数捕捉到并处理，将状态码小于 `500` 的错误统一按照 `500` 错误码处理，以方便后面的 `http-error` 中间件显示错误页面。 调用 `log` 中间件打印堆栈信息并将错误抛出到最外层的全局错误监听进行处理。 
 
 <br/> 
 
-#### 2. 修改 `middleware/index.js` 的调用方法 
-
-```js
-// const miLog = require('./mi-log/logger')
-// 修改为 index.js 文件
-const miLog = require('./mi-log')
-```
-
-<br/> 
 
 到这里我们的日志中间件已经制作完成。当然，还有很多的情况我们需要根据项目情况来继续扩展，比如结合『监控系统』、『日志分析预警』和『自动排查跟踪机制』等。可以参考一下[官方文档](http://logging.apache.org/log4j/2.x/)。
 
 <br/> 
 
 下一节中，我们将学习下如何处理请求错误。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
