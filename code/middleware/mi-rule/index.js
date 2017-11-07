@@ -1,13 +1,13 @@
 const Path = require("path");
 const fs = require('fs');
 module.exports = function (opts) {
-  let { app, rules = []} = opts
+  let {app, rules = []} = opts
   if (!app) {
     throw new Error("the app params is necessary!")
   }
   const appKeys = Object.keys(app)
   rules.forEach((item) => {
-    let { path, name} = item
+    let {path, name} = item
     if (appKeys.includes(name)) {
       throw new Error(`the name of ${name} already exists!`)
     }
