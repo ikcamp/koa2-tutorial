@@ -10,29 +10,28 @@ const baseInfo = {
   serverIp: '0.0.0.0'
 }
 
-module.exports = ( options ) => {
-  let contextLogger = {} 
-  let config = {}
-
-  const opts = Object.assign({}, baseInfo, options || {}) ;
-  const { env, appLogLevel, dir, serverIp, projectName } = opts
-  
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
+module.exports = (options) => {
+  const contextLogger = {}
   const appenders = {}
-  const commonInfo = { projectName, serverIp }
+  
+  const opts = Object.assign({}, baseInfo, options || {})
+  const { env, appLogLevel, dir, serverIp, projectName } = opts;
 
+	const commonInfo = { projectName, serverIp }
+	
   appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
     pattern: '-yyyy-MM-dd.log',
     alwaysIncludePattern: true
   }
+  
   if (env === "dev" || env === "local" || env === "development") {
     appenders.out = {
       type: "console"
     }
   }
-  config = {
+  let config = {
     appenders,
     categories: {
       default: {
