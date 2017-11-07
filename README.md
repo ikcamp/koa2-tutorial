@@ -366,7 +366,6 @@ const { env, appLogLevel, dir } = baseInfo
 module.exports = () => {
   const contextLogger = {}
   const appenders = {}
-  let config = {}
   
   appenders.cheese = {
     type: 'dateFile',
@@ -380,7 +379,7 @@ module.exports = () => {
       type: "console"
     }
   }
-  config = {
+  let config = {
     appenders,
     categories: {
       default: {
@@ -491,7 +490,7 @@ module.exports = () => {
       type: "console"
     }
   }
-  config = {
+  let config = {
     appenders,
     categories: {
       default: {
@@ -600,9 +599,8 @@ module.exports = (options) => {
   // 继承自 baseInfo 默认参数
   const opts = Object.assign({}, baseInfo, options || {})
   // 需要的变量解构 方便使用
-  const { env, appLogLevel, dir, serverIp, projectName } = opts;
-
-	const commonInfo = { projectName, serverIp }
+  const { env, appLogLevel, dir, serverIp, projectName } = opts
+  const commonInfo = { projectName, serverIp }
 	
   appenders.cheese = {
     type: 'dateFile',
@@ -616,7 +614,7 @@ module.exports = (options) => {
       type: "console"
     }
   }
-  config = {
+  let config = {
     appenders,
     categories: {
       default: {
