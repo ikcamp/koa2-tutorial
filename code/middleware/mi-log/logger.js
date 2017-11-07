@@ -1,59 +1,36 @@
 const log4js = require('log4js');
-const path = require("path");
-const client = require("./access.js");
-
-// ALL OFF 这两个等级并不会直接在业务代码中使用
-const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"];
-// 几个常用的type
-// const types = ["console", "file", "dateFile", "levelFilter", "pattern"];
+const access = require("./access.js");
+const methods = ["trace", "debug", "info", "warn", "error", "fatal", "mark"]
 
 const baseInfo = {
   appLogLevel: 'debug',
   dir: 'logs',
-  env: 'local',
-  projectName: 'default',
+  env: 'dev',
+  projectName: 'koa2-tutorial',
   serverIp: '0.0.0.0'
 }
 
-/**
- * log 中间件主函数
- * 
- * @param {string} env - 环境变量
- * @param {Object} options 
- * @param {Object} options.projectName - 项目名称
- * @param {Object} options.appLogLevel - app日志记录的日志级别
- * @param {Object} options.serverIp - 当前服务器ip
- * @returns 
- */
 module.exports = (options) => {
-  let contextLogger = {};
-  let config = {};
-  const opts = Object.assign({}, baseInfo, options || {}) ;
-  const {
-    projectName,
-    serverIp,
-    appLogLevel,
-    dir,
-    env
-  } = opts;
-  const currentLevel = methods.findIndex(ele => ele === appLogLevel)
-  const appenders = {};
-  const commonInfo = { projectName, serverIp };
-
-  appenders.tasks = {
+  const contextLogger = {}
+  const appenders = {}
+  
+  const opts = Object.assign({}, baseInfo, options || {})
+  const { env, appLogLevel, dir, serverIp, projectName } = opts
+  const commonInfo = { projectName, serverIp }
+	
+  appenders.cheese = {
     type: 'dateFile',
     filename: `${dir}/task`,
     pattern: '-yyyy-MM-dd.log',
     alwaysIncludePattern: true
   }
-  // 开发环境添加终端打印日志
+  
   if (env === "dev" || env === "local" || env === "development") {
     appenders.out = {
       type: "console"
     }
   }
-
-  config = {
+  let config = {
     appenders,
     categories: {
       default: {
@@ -62,33 +39,24 @@ module.exports = (options) => {
       }
     }
   }
-  // 访问日志
-  const accessLogger = log4js.getLogger("access");
-  // 应用日志
-  const performanceLogger = log4js.getLogger("performance");
-  
-  // 将log挂在上下文上
-  return async (ctx, next) => {
-    const start = Date.now();
 
-    log4js.configure(config);
-    // level 以上级别的日志方法
+  const logger = log4js.getLogger('cheese');
+
+  return async (ctx, next) => {
+    const start = Date.now()
+
+    log4js.configure(config)
     methods.forEach((method, i) => {
-      if (i >= currentLevel) {
-        contextLogger[method] = (message) => {
-          performanceLogger[method](client(ctx, message, commonInfo))
-        }
-      } else {
-        contextLogger[method] = () => {}
+      contextLogger[method] = (message) => {
+        logger[method](access(ctx, message, commonInfo))
       }
-    });
+    })
     ctx.log = contextLogger;
 
-    await next();
-    // 记录URL以及页面执行时间
-    const delta = Date.now() - start;
-    accessLogger.info(client(ctx, {
-      responseTime: delta
+    await next()
+    const responseTime = Date.now() - start;
+    logger.info(access(ctx, {
+      responseTime: `响应时间为${responseTime/1000}s`
     }, commonInfo))
   }
 }
