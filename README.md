@@ -1,4 +1,4 @@
-<h1 align="center">基于koa2搭建node实战项目教程</h1>
+<h1 align="center">基于Koa2搭建Node.js实战项目教程</h1>
 
 
 <h4 align="right">🇨🇳  喜迎十九大 🇨🇳</h1>
