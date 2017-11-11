@@ -27,18 +27,40 @@
 ## 🇨🇳  教程大纲 
 
 -  基础篇
-   - [环境准备](https://github.com/ikcamp/koa2-tutorial/tree/0-start)
-   - [中间件用法](https://github.com/ikcamp/koa2-tutorial/tree/1-middleware)
-   - [路由koa-router](https://github.com/ikcamp/koa2-tutorial/tree/2-koa-router)
-   - [POST/GET请求](https://github.com/ikcamp/koa2-tutorial/tree/3-router-request)
-   - [代码分层](https://github.com/ikcamp/koa2-tutorial/tree/4-refactor)
-   - [视图nunjucks](https://github.com/ikcamp/koa2-tutorial/tree/5-nunjucks)
-   - [处理静态资源](https://github.com/ikcamp/koa2-tutorial/tree/6-static)
+   - 环境准备
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/0-start
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/1
+   - 中间件用法
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/1-middleware
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/2
+   - 路由koa-router
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/2-koa-router
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/3
+   - POST/GET请求
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/3-router-request
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/4
+   - 代码分层
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/4-refactor
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/5
+   - 视图nunjucks
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/5-nunjucks
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/6
+   - 处理静态资源
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/6-static
+      - 文章视频：https://camp.qianduan.group/koa2/2/1/7
 - 提升篇
-   - [解析JSON](https://github.com/ikcamp/koa2-tutorial/tree/7-mi-send)
-   - [记录日志](https://github.com/ikcamp/koa2-tutorial/tree/8-mi-log)
-   - [错误处理](https://github.com/ikcamp/koa2-tutorial/tree/9-mi-http-error)
-   - [规范与部署](https://github.com/ikcamp/koa2-tutorial/tree/10-mi-rule)
+   - 解析JSON
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/7-mi-send
+      - 文章视频：https://camp.qianduan.group/koa2/2/2/1
+   - 记录日志
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/8-mi-log
+      - 文章视频：https://camp.qianduan.group/koa2/2/2/2
+   - 错误处理
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/9-mi-http-error
+      - 文章视频：https://camp.qianduan.group/koa2/2/2/3
+   - 规范与部署
+      - GitHub：https://github.com/ikcamp/koa2-tutorial/tree/10-mi-rule
+      - 文章视频：https://camp.qianduan.group/koa2/2/2/5
 - 扩展篇-敬请期待
    - 静态资源版本控制
    - 增加数据库
