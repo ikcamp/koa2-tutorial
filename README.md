@@ -141,12 +141,13 @@ cd code/
 
 <br> 
 
-## 🇨🇳  教程制作团队  
+## 🇨🇳  iKcamp 制作团队  
 
 原创作者：[大哼](https://github.com/pplgin)、[阿干](https://github.com/xiaoyaojun)、[三三](https://github.com/l3ve)、[小虎](https://github.com/tinyuen)、[威威](https://github.com/pangz1)、[小哈](http://zoei.me/)、[DDU](https://github.com/DDU1222)、[可木](https://github.com/cfancc)、[晃晃](https://github.com/walterxu0704)  
 文案校对：[李益](https://github.com/yliiii)、[大力萌](https://github.com/yanyixin)、[Au](https://github.com/MatildaJin)、[DDU](https://github.com/DDU1222)、[小溪里](http://www.xiaoxili.com/)、[小哈](http://zoei.me/)  
 风采主播：[可木](https://github.com/cfancc)、[阿干](https://github.com/xiaoyaojun)、[Au](https://github.com/MatildaJin)、[DDU](https://github.com/DDU1222)、[小哈](http://zoei.me/)  
 视频剪辑：[小溪里](http://www.xiaoxili.com/)  
+主站运营：[给力xi](https://github.com/jackson13145)、[xty](https://github.com/xiatianyu)  
 教程主编：[BruceCham](https://github.com/brucecham)  
 
 <br/>
