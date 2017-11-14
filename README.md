@@ -29,8 +29,8 @@
 
 <br/>
 
-<div align="center" bgcolor=black>
-  <img src="./images/develop-node.png"/>
+<div align="center">
+  <img src="./images/develop-nodejs.png" width="250"/>
 </div>
 
 <br/>
