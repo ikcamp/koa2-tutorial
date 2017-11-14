@@ -45,12 +45,6 @@
 
 * 结合 async await (ES6/7) 语句中转中间件控制权，解决回调地狱问题。
 
-<br>
-
-<div align="center">
-  <img src="./images/develop-yyz.jpg"/>
-</div>
-
 <br/>
 
 ## 🇨🇳  适合人群及技术储备要求 
@@ -62,12 +56,6 @@
 - 了解 HTTP 协议 
 
 <br>
-
-<div align="center">
-  <img src="./images/develop-p.png" width="150"/>
-</div>
-
-<br/>
 
 ## 🇨🇳  亮点的课程设计，让你对 Node.js 豁然开朗 
 
