@@ -63,8 +63,8 @@
 
 <br>
 
-<div align="center">
-  <img src="./images/develop-p.png" width="150"/>
+<div align="center" style="background:#000">
+  <img src="./images/develop-p.png" width="150" style="background:#000"/>
 </div>
 
 <br/>
