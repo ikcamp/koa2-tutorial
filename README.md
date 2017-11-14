@@ -29,7 +29,7 @@
 
 <br/>
 
-<div align="center">
+<div align="center" bgcolor=black>
   <img src="./images/develop-node.png"/>
 </div>
 
