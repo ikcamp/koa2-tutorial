@@ -12,6 +12,7 @@
   <img src="./images/develop-logo.png"/>
 </div>   
 
+<br/>
 
 ## 🇨🇳  与众不同的学习方式，为你打开新的编程视角 
 
@@ -47,7 +48,6 @@
 
 <br/>
 
-
 <div align="center">
   <img src="./images/develop-hero.png" width="150"/>
 </div>
@@ -63,6 +63,12 @@
 - 了解 HTTP 协议 
 
 <br>
+
+<div align="center">
+  <img src="./images/develop-snake.png" width="150"/>
+</div>
+
+<br/>
 
 ## 🇨🇳  亮点的课程设计，让你对 Node.js 豁然开朗 
 
