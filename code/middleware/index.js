@@ -17,7 +17,7 @@ module.exports = (app) => {
     errorPageFolder: path.resolve(__dirname, '../errorPage')
   }))
 
-  app.use(miLog(app.env, {
+  app.use(miLog({
     env: app.env,
     projectName: 'koa2-tutorial',
     appLogLevel: 'debug',
