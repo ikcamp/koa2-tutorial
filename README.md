@@ -60,7 +60,7 @@ npm i koa-static -S
 
 <br/> 
 
-在 `/public/home/` 目录下新增样式文件 `main.css`，内容如下： 
+在 `/public/home/` 目录下新增样式文件 `base.css`，内容如下： 
 
 ```css
   *{
@@ -636,7 +636,7 @@ npm i koa-static -S
   │         ├── success.html
   ├── public/ 
   │     ├── home/ 
-  │         ├── main.css
+  │         ├── base.css
   ├── app.js
   ├── router.js
   ├── package.json
