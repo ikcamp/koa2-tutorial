@@ -636,7 +636,7 @@ npm i koa-static -S
   │         ├── success.html
   ├── public/ 
   │     ├── home/ 
-  │         ├── base.wxss 
+  │         ├── main.css
   ├── app.js
   ├── router.js
   ├── package.json
