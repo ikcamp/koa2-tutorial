@@ -163,7 +163,7 @@ router
 
 <br/>
 
-在 `HTTP` 协议方法中，`GET`、`POST`、`PUT`、`DELETE` 分别对应 `查`，`增`，`改`，`删`，这里 `router` 的方法也一一对应。通常我们使用 `GET` 来查询和获取数据，使用 `POST` 来更新资源。`PUT` 和 `DELETE` 使用比较少，但是如果你们团队采用 `RESTful架构`，就比较推荐使用了。我们注意到，上述代码中还有一个`all` 方法。`all` 方法用于处理上述方法无法匹配的情况，或者你不确定客户端发送的请求方法类型。
+在任意http请求中，遵从 `RESTful` 规范，可以把 `GET`、`POST`、`PUT`、`DELETE` 类型的请求分别对应 `查`，`增`，`改`，`删`，这里 `router` 的方法也一一对应。通常我们使用 `GET` 来查询和获取数据，使用 `POST` 来更新资源。`PUT` 和 `DELETE` 使用比较少，但是如果你们团队采用 `RESTful架构`，就比较推荐使用了。我们注意到，上述代码中还有一个`all` 方法。`all` 方法通常用于匹配一组路由或者全部路由从而做一些统一设置和处理，也可以处理不确定客户端发送的请求方法类型的情况。
 
 <br/>
 
@@ -191,21 +191,49 @@ $.ajax({
 
 <br/>
 
-上面例子中两个方法最主要的区别就是 `ajax` 中 `method` 的值，`method` 的值和 `router` 的方法一一对应。上述代码中没有处理异常，当请求都无法匹配的时候，我们可以跳转到自定义的 `404` 页面，比如：
+上面例子中两个方法最主要的区别就是 `ajax` 中 `method` 的值，`method` 的值和 `router` 的方法一一对应。
+<br/>
+再举一个使用`all`方法的例子，假设我们要为所有请求设置跨域头，可以通过如下代码实现：
 
 ```js
 router.all('/*', async (ctx, next) => {
-  ctx.response.status = 404;
-  ctx.response.body = '<h1>404 Not Found</h1>';
+  // *代表允许来自所有域名请求
+  ctx.set("Access-Control-Allow-Origin", "*");
+  // 其他一些设置...
+  await next();
 });
 ```
+这段代码表示对于所有请求，允许来自所有域名。这是一种很危险的做法，在真实项目中一定不能这么做。
 
 <br/>
 
 `*` 号是一种通配符，表示匹配任意 `URL`。这里的返回是一种简化的写法，真实开发中，我们肯定要去读取 `HTML` 文件或者其他模板文件的内容，再响应请求。关于这部分的内容后面的章节中会详细介绍。
 
 <br/>
+另外，如果一条路由在`all`方法和其他方法中同时命中，只有执行了`await next()`，那么这条路由会在`all`方法和其他方法中都会起作用，举个例子，看如下代码：
 
+```js
+const Koa = require('koa')
+const router = require('koa-router')()
+const app = new Koa()
+
+// 添加路由
+router.get('/', async (ctx, next) => {
+  ctx.response.body = `<h1>index page</h1>`
+  await next();
+})
+router.all('/', async (ctx, next) => {
+  console.log('match "all" method')
+  await next();
+});
+// 调用路由中间件
+app.use(router.routes())
+
+app.listen(3000, ()=>{
+  console.log('server is running at http://localhost:3000')
+})
+```
+执行这段代码，我们不仅能够访问http://localhost:3000/看到“index page”，也能够在控制台中看到“'match "all" method'”，说明路由"/"不仅执行了`get`方法的回调，也执行了`all`方法的回调函数。但是，如果我们把`get`方法中的`await next()`去掉，那么就不会命中`all`方法的路由规则，也不会执行`all`方法的回调函数了。因为说到底，对路由的处理也是一种中间件，如果不执行`await next()`把控制权交给下一个中间件，那么后面的路由就不会再执行了。
 ## 其他特性
 
 
