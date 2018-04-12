@@ -42,11 +42,11 @@ module.exports = (app) => {
     app,
     rules: [
       {
-        path: path.join(__dirname, '../controller'),
+        folder: path.join(__dirname, '../controller'),
         name: 'controller'
       },
       {
-        path: path.join(__dirname, '../service'),
+        folder: path.join(__dirname, '../service'),
         name: 'service'
       }
     ]
