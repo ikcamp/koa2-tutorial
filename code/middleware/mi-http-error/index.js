@@ -1,11 +1,11 @@
-const Path = require('path') 
+const path = require('path') 
 const nunjucks = require('nunjucks')
 module.exports = (opts = {}) => {
   // 增加环境变量，用来传入到视图中，方便调试
   const env = opts.env || process.env.NODE_ENV || 'development'  
 
   const folder = opts.errorPageFolder
-  const templatePath = Path.resolve(__dirname, './error.html')
+  const templatePath = path.resolve(__dirname, './error.html')
   let fileName = 'other'
   return async (ctx, next) => {
     try {
@@ -28,7 +28,7 @@ module.exports = (opts = {}) => {
         status = 500
         fileName = status
       }
-      const filePath = folder ? Path.join(folder, `${fileName}.html`) : templatePath
+      const filePath = folder ? path.join(folder, `${fileName}.html`) : templatePath
       // 渲染对应错误类型的视图，并传入参数对象
       try{
         nunjucks.configure( folder ? folder : __dirname )
