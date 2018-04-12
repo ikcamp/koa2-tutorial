@@ -41,11 +41,10 @@ module.exports = (options) => {
   }
 
   const logger = log4js.getLogger('cheese');
-
+  log4js.configure(config)
   return async (ctx, next) => {
     const start = Date.now()
 
-    log4js.configure(config)
     methods.forEach((method, i) => {
       contextLogger[method] = (message) => {
         logger[method](access(ctx, message, commonInfo))
