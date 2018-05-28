@@ -59,19 +59,19 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  console.log('中间件1 doSoming')
+  console.log('中间件1 doSomething')
   await next();
   console.log('中间件1 end')
 })
 
 app.use(async (ctx, next) => {
-  console.log('中间件2 doSoming')
+  console.log('中间件2 doSomething')
   await next();
   console.log('中间件2 end')
 })
 
 app.use(async (ctx, next) => {
-  console.log('中间件3 doSoming')
+  console.log('中间件3 doSomething')
   await next();
   console.log('中间件3 end')
 })
@@ -95,9 +95,9 @@ server is running at http://localhost:3000
 
 ```txt
 server is running at http://localhost:3000
-中间件1 doSoming
-中间件2 doSoming
-中间件3 doSoming
+中间件1 doSomething
+中间件2 doSomething
+中间件3 doSomething
 中间件3 end
 中间件2 end
 中间件1 end
@@ -129,20 +129,20 @@ app.use(async (ctx, next)=>{
 });
 
 app.use(async (ctx, next) => {
-  console.log('中间件1 doSoming')
+  console.log('中间件1 doSomething')
   await next();
   console.log('中间件1 end')
 })
 
 app.use(async (ctx, next) => {
-  console.log('中间件2 doSoming')
+  console.log('中间件2 doSomething')
   // 注意，这里我们删掉了 next
   // await next()
   console.log('中间件2 end')
 })
 
 app.use(async (ctx, next) => {
-  console.log('中间件3 doSoming')
+  console.log('中间件3 doSomething')
   await next();
   console.log('中间件3 end')
 })
@@ -158,8 +158,8 @@ app.listen(3000, () => {
 
 ```txt
 server is running at http://localhost:3000
-中间件1 doSoming
-中间件2 doSoming
+中间件1 doSomething
+中间件2 doSomething
 中间件2 end
 中间件1 end
 请求地址: /，响应时间：1ms
