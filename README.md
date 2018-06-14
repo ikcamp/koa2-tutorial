@@ -96,10 +96,6 @@
       - [GitHub](https://github.com/ikcamp/koa2-tutorial/tree/9-mi-http-error)　　　　[文章视频](https://camp.qianduan.group/koa2/2/2/3)
    - 规范与部署——制定合适的团队规范，提升开发效率
       - [GitHub](https://github.com/ikcamp/koa2-tutorial/tree/10-mi-rule)　　　　[文章视频](https://camp.qianduan.group/koa2/2/2/5)
-- 扩展篇-【进行中，预计3、4月份出，敬请期待】
-   - 静态资源版本控制
-   - 增加数据库
-   - 前后端分离方案
 
 
 <br/>
