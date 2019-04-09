@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="./images/koa.png"/>
+</div>   
+
 <h1 align="center">基于Koa2搭建Node.js实战项目教程</h1>
 
 
