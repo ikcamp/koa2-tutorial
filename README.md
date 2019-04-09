@@ -1,5 +1,3 @@
-<img src="https://user-gold-cdn.xitu.io/2019/1/11/1683b8439e81b29e?w=1285&h=720&f=png&s=342003"/>
-
 <h1 align="center">基于Koa2搭建Node.js实战项目教程</h1>
 
 
